@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, RouteProps, Redirect } from "react-router-dom";
+import { Route, RouteProps, Redirect } from "react-router";
 
 import { NotAuthorized } from "./NotAuthorized";
 import { Authorized } from "./Authorized";

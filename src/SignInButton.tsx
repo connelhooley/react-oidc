@@ -1,5 +1,5 @@
 import React, { PropsWithChildren, DetailedHTMLProps } from "react";
-import { RouteComponentProps, withRouter } from "react-router-dom";
+import { RouteComponentProps, withRouter } from "react-router";
 
 import { useAuth } from "./AuthProvider";
 

@@ -3,6 +3,7 @@
   "version": "1.0.0-alpha.1",
   "description": "A few opinionated React components wrapping oidc-client",
   "scripts": {
+    "build": "tsc",
     "test": "jest"
   },
   "main": "dist/index.js",
@@ -11,10 +12,10 @@
   "license": "ISC",
   "dependencies": {
     "@types/react": "^16.9.35",
-    "@types/react-router-dom": "^5.1.5",
+    "@types/react-router": "^5.1.7",
     "oidc-client": "^1.10.1",
     "react": "^16.13.1",
-    "react-router-dom": "^5.2.0"
+    "react-router": "^5.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.10.2",

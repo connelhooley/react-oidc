@@ -1,6 +1,6 @@
 import React from "react";
 import { createMemoryHistory } from "history";
-import { Router } from "react-router-dom";
+import { Router } from "react-router";
 import { render, screen, act } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
 
@@ -172,7 +172,7 @@ describe("AuthProvider", () => {
         const history = createMemoryHistory();
         
         render(
-            <Router history={history}>>
+            <Router history={history}>
                 <AuthProvider oidcSettings={oidcSettings}>
                     <p>Hello world</p>
                 </AuthProvider>
