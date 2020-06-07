@@ -15,23 +15,23 @@ const AuthContext = createContext<AuthContextValue|undefined>(undefined);
 
 export interface AuthProviderProps {
     oidcSettings: UserManagerSettings;
-    loadingComponentFactory?: () => JSX.Element;
+    signInCallbackFallbackRoute?: string;
     defaultAuthorizedRouteRedirect?: string;
     defaultNotAuthorizedRouteRedirect?: string;
-    signInCallbackFallbackRoute?: string;
     signInCallbackRoute?: string;
     silentSignInCallbackRoute?: string;
+    loadingComponentFactory?: () => JSX.Element;
 }
 
 export function AuthProvider(props: PropsWithChildren<AuthProviderProps>) {
     const {
         oidcSettings,
-        loadingComponentFactory,
+        signInCallbackFallbackRoute,
         defaultAuthorizedRouteRedirect,
         defaultNotAuthorizedRouteRedirect,
-        signInCallbackFallbackRoute,
         signInCallbackRoute,
         silentSignInCallbackRoute,
+        loadingComponentFactory,
         children,
     } = props;
 
