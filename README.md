@@ -11,7 +11,7 @@ To use this plugin, the oidc server you are interacting with must supply the fol
 - `name`
 - `email`
 - `role`
-
+<!-- -->
 - [React OIDC](#react-oidc)
 - [AuthProvider](#authprovider)
 - [useUser](#useuser)
