@@ -28,12 +28,12 @@ describe("SignInButton", () => {
             <Router history={history}>
                 <SignInButton data-testid="assert">Hello</SignInButton>
             </Router>
-        );        
+        );
         render(tree);
-        
+
         // Act
         fireEvent.click(await screen.findByTestId("assert"));
-        
+
         // Assert
         expect(service.startSignIn).toHaveBeenCalledTimes(1);
     });
@@ -54,11 +54,11 @@ describe("SignInButton", () => {
             <Router history={history}>
                 <SignInButton id={id} className={className}>{content}</SignInButton>
             </Router>
-        );        
-        
+        );
+
         // Act
         render(tree);
-        
+
         // Assert
         const element = await screen.findByRole("button");
         expect(element).toHaveTextContent(content);

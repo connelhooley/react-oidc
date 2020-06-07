@@ -11,7 +11,7 @@ export interface User {
 export class AuthService {
     private userManager: UserManager;
     private signInCallbackFallbackRoute: string;
-    
+
     public onUserUpdated?: (user?: User|false) => void;
 
     public constructor(oidcSettings: UserManagerSettings, signInCallbackFallbackRoute: string) {

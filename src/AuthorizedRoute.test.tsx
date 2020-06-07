@@ -44,12 +44,12 @@ describe("AuthorizedRoute", () => {
                 </Switch>
             </Router>
         );
-        
+
         render(tree);
-        
+
         // Act
         history.push(route);
-        
+
         // Assert
         expect(await screen.findByTestId("assert")).toHaveTextContent(content);
     });
@@ -76,12 +76,12 @@ describe("AuthorizedRoute", () => {
                 </Switch>
             </Router>
         );
-        
+
         render(tree);
-        
+
         // Act
         history.push(route);
-        
+
         // Assert
         expect(screen.queryByTestId("assert")).toBeNull();
     });
@@ -108,12 +108,12 @@ describe("AuthorizedRoute", () => {
                 </Switch>
             </Router>
         );
-        
+
         render(tree);
-        
+
         // Act
         history.push(route);
-        
+
         // Assert
         expect(screen.queryByTestId("assert")).toBeNull();
     });
@@ -146,12 +146,12 @@ describe("AuthorizedRoute", () => {
                 </Switch>
             </Router>
         );
-        
+
         render(tree);
-        
+
         // Act
         history.push(route);
-        
+
         // Assert
         expect(await screen.findByTestId("assert-fallback")).toHaveTextContent(fallbackContent);
     });
@@ -184,12 +184,12 @@ describe("AuthorizedRoute", () => {
                 </Switch>
             </Router>
         );
-        
+
         render(tree);
-        
+
         // Act
         history.push(route);
-        
+
         // Assert
         expect(await screen.findByTestId("assert-fallback")).toHaveTextContent(fallbackContent);
     });
@@ -228,15 +228,15 @@ describe("AuthorizedRoute", () => {
                 </Switch>
             </Router>
         );
-        
+
         render(tree);
-        
+
         // Act
         history.push(route);
-        
+
         // Assert
         expect(screen.queryByTestId("assert-fallback")).toBeNull();
-    });    
+    });
 
     test("should redirect to default fallback route when a route isn't specified and the user is not signed in", async () => {
         // Arrange
@@ -266,12 +266,12 @@ describe("AuthorizedRoute", () => {
                 </Switch>
             </Router>
         );
-        
+
         render(tree);
-        
+
         // Act
         history.push(route);
-        
+
         // Assert
         expect(await screen.findByTestId("assert-fallback")).toHaveTextContent(fallbackContent);
     });
@@ -304,12 +304,12 @@ describe("AuthorizedRoute", () => {
                 </Switch>
             </Router>
         );
-        
+
         render(tree);
-        
+
         // Act
         history.push(route);
-        
+
         // Assert
         expect(await screen.findByTestId("assert-fallback")).toHaveTextContent(fallbackContent);
     });
@@ -348,12 +348,12 @@ describe("AuthorizedRoute", () => {
                 </Switch>
             </Router>
         );
-        
+
         render(tree);
-        
+
         // Act
         history.push(route);
-        
+
         // Assert
         expect(screen.queryByTestId("assert-fallback")).toBeNull();
     });

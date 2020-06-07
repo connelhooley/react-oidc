@@ -25,7 +25,7 @@ describe("Authorized", () => {
         render(
             <Authorized><p data-testid="assert">{content}</p></Authorized>
         );
-        
+
         // Assert
         expect(await screen.findByTestId("assert")).toHaveTextContent(content);
     });
@@ -46,7 +46,7 @@ describe("Authorized", () => {
         render(
             <Authorized role={role}><p data-testid="assert">{content}</p></Authorized>
         );
-        
+
         // Assert
         expect(await screen.findByTestId("assert")).toHaveTextContent(content);
     });
@@ -65,7 +65,7 @@ describe("Authorized", () => {
         render(
             <Authorized role="some other role"><p data-testid="assert">hello, world</p></Authorized>
         );
-        
+
         // Assert
         expect(screen.queryByTestId("assert")).toBeNull();
     });
@@ -78,7 +78,7 @@ describe("Authorized", () => {
         render(
             <Authorized><p data-testid="assert">hello, world</p></Authorized>
         );
-        
+
         // Assert
         expect(screen.queryByTestId("assert")).toBeNull();
     });
@@ -91,7 +91,7 @@ describe("Authorized", () => {
         render(
             <Authorized><p data-testid="assert">hello, world</p></Authorized>
         );
-        
+
         // Assert
         expect(screen.queryByTestId("assert")).toBeNull();
     });

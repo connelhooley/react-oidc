@@ -11,7 +11,7 @@ const useUserMock = useUser as jest.MockedFunction<typeof useUser>;
 
 describe("Authorizing", () => {
     test("should not render children when user is signed in", async () => {
-        // Arrange        
+        // Arrange
         useUserMock.mockImplementation(() => ({
             id: "id",
             token: "some token",
@@ -24,26 +24,26 @@ describe("Authorizing", () => {
         render(
             <Authorizing><p data-testid="assert">hello, world</p></Authorizing>
         );
-        
+
         // Assert
         expect(screen.queryByTestId("assert")).toBeNull();
     });
 
     test("should not render children when user is signed out", () => {
-        // Arrange        
+        // Arrange
         useUserMock.mockImplementation(() => false);
 
         // Act
         render(
             <Authorizing><p data-testid="assert">hello, world</p></Authorizing>
         );
-        
+
         // Assert
         expect(screen.queryByTestId("assert")).toBeNull();
     });
 
     test("should render children when user is signing in or out", async () => {
-        // Arrange        
+        // Arrange
         useUserMock.mockImplementation(() => undefined);
         const content = "hello, world";
 
@@ -51,7 +51,7 @@ describe("Authorizing", () => {
         render(
             <Authorizing><p data-testid="assert">{content}</p></Authorizing>
         );
-        
+
         // Assert
         expect(await screen.findByTestId("assert")).toHaveTextContent(content);
     });

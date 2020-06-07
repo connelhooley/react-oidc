@@ -23,7 +23,7 @@ export interface AuthProviderProps {
     loadingComponentFactory?: () => JSX.Element;
 }
 
-export function AuthProvider(props: PropsWithChildren<AuthProviderProps>) {
+export function AuthProvider(props: PropsWithChildren<AuthProviderProps>): JSX.Element {
     const {
         oidcSettings,
         signInCallbackFallbackRoute,

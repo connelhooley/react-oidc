@@ -10,7 +10,7 @@ export interface AuthorizedRouteProps {
     redirect?: string;
 }
 
-export function AuthorizedRoute(props: AuthorizedRouteProps & RouteProps) {
+export function AuthorizedRoute(props: AuthorizedRouteProps & RouteProps): JSX.Element {
     const { defaultAuthorizedRouteRedirect } = useAuth();
     return (
         <Route {...props}>

@@ -10,7 +10,7 @@ export interface NotAuthorizedRouteProps {
     redirect?: string;
 }
 
-export function NotAuthorizedRoute(props: NotAuthorizedRouteProps & RouteProps) {
+export function NotAuthorizedRoute(props: NotAuthorizedRouteProps & RouteProps): JSX.Element {
     const { defaultNotAuthorizedRouteRedirect } = useAuth();
     return (
         <Route {...props}>

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import { createMemoryHistory } from "history";
 import { Router, Route } from "react-router";
@@ -10,6 +11,9 @@ import { AuthService } from "./AuthService";
 jest.mock("./AuthService");
 
 const AuthServiceMock = AuthService as jest.Mock<AuthService>;
+
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+const noop = () => {};
 
 describe("AuthProvider", () => {
     test("should create and initialise AuthService on first render", () => {
@@ -28,7 +32,7 @@ describe("AuthProvider", () => {
                 </AuthProvider>
             </Router>
         );
-        
+
         // Assert
         expect(AuthServiceMock).toHaveBeenCalledTimes(1);
         expect(AuthServiceMock).toHaveBeenCalledWith(oidcSettings, signInCallbackFallbackRoute);
@@ -50,7 +54,7 @@ describe("AuthProvider", () => {
                 </AuthProvider>
             </Router>
         );
-        
+
         // Assert
         expect(AuthServiceMock).toHaveBeenCalledTimes(1);
         expect(AuthServiceMock).toHaveBeenCalledWith(oidcSettings, "/");
@@ -70,7 +74,7 @@ describe("AuthProvider", () => {
                     <p>Hello world</p>
                 </AuthProvider>
             </Router>
-        );        
+        );
         oidcSettings = {
             goodbye: "world",
         };
@@ -84,7 +88,7 @@ describe("AuthProvider", () => {
                 </AuthProvider>
             </Router>
         );
-        
+
         // Assert
         expect(AuthServiceMock).toHaveBeenCalledTimes(1);
         expect(AuthServiceMock.mock.instances[0].initiate).toHaveBeenCalledTimes(1);
@@ -113,7 +117,7 @@ describe("AuthProvider", () => {
                 </AuthProvider>
             </Router>
         );
-        
+
         // Assert
         expect(AuthServiceMock).toHaveBeenCalledTimes(1);
         expect(AuthServiceMock.mock.instances[0].initiate).toHaveBeenCalledTimes(1);
@@ -136,7 +140,7 @@ describe("AuthProvider", () => {
 
         // Act
         act(() => AuthServiceMock.mock.instances[0].onUserUpdated?.call(undefined, false));
-        
+
         // Assert
         expect(AuthServiceMock).toHaveBeenCalledTimes(1);
         expect(AuthServiceMock.mock.instances[0].initiate).toHaveBeenCalledTimes(1);
@@ -159,7 +163,7 @@ describe("AuthProvider", () => {
 
         // Act
         history.push("/non-sign-in-route");
-        
+
         // Assert
         expect(await screen.findByTestId("assert")).toHaveTextContent(content);
     });
@@ -170,7 +174,7 @@ describe("AuthProvider", () => {
             hello: "world",
         };
         const history = createMemoryHistory();
-        
+
         render(
             <Router history={history}>
                 <AuthProvider oidcSettings={oidcSettings}>
@@ -178,10 +182,10 @@ describe("AuthProvider", () => {
                 </AuthProvider>
             </Router>
         );
-        
+
         // Act
         history.push("/non-sign-in-route");
-        
+
         // Assert
         expect(AuthServiceMock.mock.instances[0].initiate).toHaveBeenCalledTimes(1);
         expect(AuthServiceMock.mock.instances[0].onUserUpdated).toBeDefined();
@@ -192,12 +196,12 @@ describe("AuthProvider", () => {
         const oidcSettings: any = {
             hello: "world",
         };
-        
+
         const redirectRoute = "/some-other-route";
         jest.spyOn(AuthServiceMock.prototype, "completeSignIn").mockImplementation(() => redirectRoute);
-        
+
         const content = "hello, world";
-        const history = createMemoryHistory();        
+        const history = createMemoryHistory();
         render(
             <Router history={history}>
                 <AuthProvider oidcSettings={oidcSettings}>
@@ -207,10 +211,10 @@ describe("AuthProvider", () => {
                 </AuthProvider>
             </Router>
         );
-        
+
         // Act
         act(() => history.push("/callback"));
-        
+
         // Assert
         expect(AuthServiceMock.mock.instances[0].completeSignIn).toHaveBeenCalledTimes(1);
         expect(await screen.findByTestId("assert")).toHaveTextContent(content);
@@ -222,12 +226,12 @@ describe("AuthProvider", () => {
             hello: "world",
         };
         const signInCallbackRoute = "/configured-callback";
-        
+
         const redirectRoute = "/some-other-route";
         jest.spyOn(AuthServiceMock.prototype, "completeSignIn").mockImplementation(() => redirectRoute);
-        
+
         const content = "hello, world";
-        const history = createMemoryHistory();        
+        const history = createMemoryHistory();
         render(
             <Router history={history}>
                 <AuthProvider oidcSettings={oidcSettings} signInCallbackRoute={signInCallbackRoute}>
@@ -237,26 +241,26 @@ describe("AuthProvider", () => {
                 </AuthProvider>
             </Router>
         );
-        
+
         // Act
         act(() => history.push(signInCallbackRoute));
-        
+
         // Assert
         expect(AuthServiceMock.mock.instances[0].completeSignIn).toHaveBeenCalledTimes(1);
         expect(await screen.findByTestId("assert")).toHaveTextContent(content);
     });
-    
+
     test("should not display children while complete sign in process is in-progress", async () => {
         // Arrange
         const oidcSettings: any = {
             hello: "world",
         };
         const signInCallbackRoute = "/configured-callback";
-        
-        jest.spyOn(AuthServiceMock.prototype, "completeSignIn").mockImplementation(() => new Promise(() => {}));
-        
+
+        jest.spyOn(AuthServiceMock.prototype, "completeSignIn").mockImplementation(() => new Promise(noop));
+
         const content = "hello, world";
-        const history = createMemoryHistory();        
+        const history = createMemoryHistory();
         render(
             <Router history={history}>
                 <AuthProvider oidcSettings={oidcSettings} signInCallbackRoute={signInCallbackRoute}>
@@ -264,10 +268,10 @@ describe("AuthProvider", () => {
                 </AuthProvider>
             </Router>
         );
-        
+
         // Act
         act(() => history.push(signInCallbackRoute));
-        
+
         // Assert
         expect(AuthServiceMock.mock.instances[0].completeSignIn).toHaveBeenCalledTimes(1);
         expect(screen.queryByTestId("assert")).toBeNull();
@@ -285,11 +289,11 @@ describe("AuthProvider", () => {
                 <p data-testid="loading-assert">{loadingContent}</p>
             );
         };
-        
-        jest.spyOn(AuthServiceMock.prototype, "completeSignIn").mockImplementation(() => new Promise(() => {}));
-        
+
+        jest.spyOn(AuthServiceMock.prototype, "completeSignIn").mockImplementation(() => new Promise(noop));
+
         const content = "hello, world";
-        const history = createMemoryHistory();        
+        const history = createMemoryHistory();
         render(
             <Router history={history}>
                 <AuthProvider oidcSettings={oidcSettings} signInCallbackRoute={signInCallbackRoute} loadingComponentFactory={() => <Loading />}>
@@ -297,16 +301,16 @@ describe("AuthProvider", () => {
                 </AuthProvider>
             </Router>
         );
-        
+
         // Act
         act(() => history.push(signInCallbackRoute));
-        
+
         // Assert
         expect(AuthServiceMock.mock.instances[0].completeSignIn).toHaveBeenCalledTimes(1);
         expect(await screen.findByTestId("loading-assert")).toHaveTextContent(loadingContent);
     });
 
-    test("should display loading component while complete sign in process is in-progress if one is given", async () => {
+    test("should not display loading component after complete sign in process is complete if one is given", async () => {
         // Arrange
         const oidcSettings: any = {
             hello: "world",
@@ -318,12 +322,12 @@ describe("AuthProvider", () => {
                 <p data-testid="loading-assert">{loadingContent}</p>
             );
         };
-        
+
         const redirectRoute = "/some-other-route";
         jest.spyOn(AuthServiceMock.prototype, "completeSignIn").mockImplementation(() => redirectRoute);
-        
+
         const content = "hello, world";
-        const history = createMemoryHistory();        
+        const history = createMemoryHistory();
         render(
             <Router history={history}>
                 <AuthProvider oidcSettings={oidcSettings} signInCallbackRoute={signInCallbackRoute} loadingComponentFactory={() => <Loading />}>
@@ -331,16 +335,16 @@ describe("AuthProvider", () => {
                 </AuthProvider>
             </Router>
         );
-        
+
         // Act
         act(() => history.push(signInCallbackRoute));
-        
+
         // Assert
         expect(AuthServiceMock.mock.instances[0].completeSignIn).toHaveBeenCalledTimes(1);
         expect(await screen.findByTestId("assert")).toHaveTextContent(content);
         expect(screen.queryByTestId("loading-assert")).toBeNull();
     });
-    
+
     test("should complete silent sign in process in silent-sign-in route when a silentSignInCallbackRoute prop is not given", async () => {
         // Arrange
         const oidcSettings: any = {
@@ -352,9 +356,9 @@ describe("AuthProvider", () => {
                 <p data-testid="loading-assert">{loadingContent}</p>
             );
         };
-        
+
         const content = "hello, world";
-        const history = createMemoryHistory();        
+        const history = createMemoryHistory();
         render(
             <Router history={history}>
                 <AuthProvider oidcSettings={oidcSettings} loadingComponentFactory={() => <Loading />}>
@@ -362,10 +366,10 @@ describe("AuthProvider", () => {
                 </AuthProvider>
             </Router>
         );
-        
+
         // Act
         act(() => history.push("/silent-callback"));
-        
+
         // Assert
         expect(AuthServiceMock.mock.instances[0].completeRefresh).toHaveBeenCalledTimes(1);
         expect(screen.queryByTestId("assert")).toBeNull();
@@ -384,9 +388,9 @@ describe("AuthProvider", () => {
                 <p data-testid="loading-assert">{loadingContent}</p>
             );
         };
-        
+
         const content = "hello, world";
-        const history = createMemoryHistory();        
+        const history = createMemoryHistory();
         render(
             <Router history={history}>
                 <AuthProvider oidcSettings={oidcSettings} silentSignInCallbackRoute={silentSignInCallbackRoute} loadingComponentFactory={() => <Loading />}>
@@ -394,10 +398,10 @@ describe("AuthProvider", () => {
                 </AuthProvider>
             </Router>
         );
-        
+
         // Act
         act(() => history.push(silentSignInCallbackRoute));
-        
+
         // Assert
         expect(AuthServiceMock.mock.instances[0].completeRefresh).toHaveBeenCalledTimes(1);
         expect(screen.queryByTestId("assert")).toBeNull();
@@ -417,10 +421,10 @@ describe("AuthProvider", () => {
             );
         };
 
-        jest.spyOn(AuthServiceMock.prototype, "completeRefresh").mockImplementation(() => new Promise(() => {}));
-        
+        jest.spyOn(AuthServiceMock.prototype, "completeRefresh").mockImplementation(() => new Promise(noop));
+
         const content = "hello, world";
-        const history = createMemoryHistory();        
+        const history = createMemoryHistory();
         render(
             <Router history={history}>
                 <AuthProvider oidcSettings={oidcSettings} silentSignInCallbackRoute={silentSignInCallbackRoute} loadingComponentFactory={() => <Loading />}>
@@ -428,10 +432,10 @@ describe("AuthProvider", () => {
                 </AuthProvider>
             </Router>
         );
-        
+
         // Act
         act(() => history.push(silentSignInCallbackRoute));
-        
+
         // Assert
         expect(AuthServiceMock.mock.instances[0].completeRefresh).toHaveBeenCalledTimes(1);
         expect(screen.queryByTestId("assert")).toBeNull();
@@ -457,9 +461,9 @@ describe("useUser", () => {
         const AssertComponent = () => {
             user = useUser();
             return <></>;
-        };        
+        };
         history.push("/non-sign-in-route");
-        
+
         render(
             <Router history={history}>
                 <AuthProvider oidcSettings={oidcSettings}>
@@ -467,10 +471,10 @@ describe("useUser", () => {
                 </AuthProvider>
             </Router>
         );
-        
+
         // Act
         act(() => AuthServiceMock.mock.instances[0].onUserUpdated?.call(undefined, expectedUser));
-        
+
         // Assert
         expect(user).toEqual(expectedUser);
     });
@@ -486,9 +490,9 @@ describe("useUser", () => {
         const AssertComponent = () => {
             user = useUser();
             return <></>;
-        };        
+        };
         history.push("/non-sign-in-route");
-        
+
         render(
             <Router history={history}>
                 <AuthProvider oidcSettings={oidcSettings}>
@@ -496,10 +500,10 @@ describe("useUser", () => {
                 </AuthProvider>
             </Router>
         );
-        
+
         // Act
         act(() => AuthServiceMock.mock.instances[0].onUserUpdated?.call(undefined, expectedUser));
-        
+
         // Assert
         expect(user).toEqual(expectedUser);
     });
@@ -515,9 +519,9 @@ describe("useUser", () => {
         const AssertComponent = () => {
             user = useUser();
             return <></>;
-        };        
+        };
         history.push("/non-sign-in-route");
-        
+
         render(
             <Router history={history}>
                 <AuthProvider oidcSettings={oidcSettings}>
@@ -525,10 +529,10 @@ describe("useUser", () => {
                 </AuthProvider>
             </Router>
         );
-        
+
         // Act
         act(() => AuthServiceMock.mock.instances[0].onUserUpdated?.call(undefined, expectedUser));
-        
+
         // Assert
         expect(user).toEqual(expectedUser);
     });
@@ -539,17 +543,17 @@ describe("useUser", () => {
             useUser();
             return <></>;
         };
-        
+
         // Act
         const act = () => render(<AssertComponent />);
-        
+
         // Assert
         expect(act).toThrowError("useUser called outside of AuthProvider");
     });
 });
 
 describe("useAuth", () => {
-    test("should provide auth context containing a user who is signed out to children in all non-sign-in routes", () => {
+    test("should provide auth context containing a user who is signed in to children in all non-sign-in routes", () => {
         // Arrange
         const oidcSettings: any = {
             hello: "world",
@@ -566,9 +570,9 @@ describe("useAuth", () => {
         const AssertComponent = () => {
             auth = useAuth();
             return <></>;
-        };        
+        };
         history.push("/non-sign-in-route");
-        
+
         render(
             <Router history={history}>
                 <AuthProvider oidcSettings={oidcSettings}>
@@ -576,10 +580,10 @@ describe("useAuth", () => {
                 </AuthProvider>
             </Router>
         );
-        
+
         // Act
         act(() => AuthServiceMock.mock.instances[0].onUserUpdated?.call(undefined, expectedUser));
-        
+
         // Assert
         expect(auth.user).toEqual(expectedUser);
     });
@@ -595,9 +599,9 @@ describe("useAuth", () => {
         const AssertComponent = () => {
             auth = useAuth();
             return <></>;
-        };        
+        };
         history.push("/non-sign-in-route");
-        
+
         render(
             <Router history={history}>
                 <AuthProvider oidcSettings={oidcSettings}>
@@ -605,10 +609,10 @@ describe("useAuth", () => {
                 </AuthProvider>
             </Router>
         );
-        
+
         // Act
         act(() => AuthServiceMock.mock.instances[0].onUserUpdated?.call(undefined, expectedUser));
-        
+
         // Assert
         expect(auth.user).toEqual(expectedUser);
     });
@@ -624,9 +628,9 @@ describe("useAuth", () => {
         const AssertComponent = () => {
             auth = useAuth();
             return <></>;
-        };        
+        };
         history.push("/non-sign-in-route");
-        
+
         render(
             <Router history={history}>
                 <AuthProvider oidcSettings={oidcSettings}>
@@ -634,10 +638,10 @@ describe("useAuth", () => {
                 </AuthProvider>
             </Router>
         );
-        
+
         // Act
         act(() => AuthServiceMock.mock.instances[0].onUserUpdated?.call(undefined, expectedUser));
-        
+
         // Assert
         expect(auth.user).toEqual(expectedUser);
     });
@@ -652,9 +656,9 @@ describe("useAuth", () => {
         const AssertComponent = () => {
             auth = useAuth();
             return <></>;
-        };        
+        };
         history.push("/non-sign-in-route");
-        
+
         render(
             <Router history={history}>
                 <AuthProvider oidcSettings={oidcSettings}>
@@ -662,9 +666,9 @@ describe("useAuth", () => {
                 </AuthProvider>
             </Router>
         );
-        // Act        
+        // Act
         act(() => AuthServiceMock.mock.instances[0].onUserUpdated?.call(undefined, false));
-        
+
         // Assert
         expect(auth.service).toEqual(AuthServiceMock.mock.instances[0]);
     });
@@ -679,9 +683,9 @@ describe("useAuth", () => {
         const AssertComponent = () => {
             auth = useAuth();
             return <></>;
-        };        
+        };
         history.push("/non-sign-in-route");
-        
+
         render(
             <Router history={history}>
                 <AuthProvider oidcSettings={oidcSettings}>
@@ -689,9 +693,9 @@ describe("useAuth", () => {
                 </AuthProvider>
             </Router>
         );
-        // Act        
+        // Act
         act(() => AuthServiceMock.mock.instances[0].onUserUpdated?.call(undefined, false));
-        
+
         // Assert
         expect(auth.defaultAuthorizedRouteRedirect).toBe("/");
     });
@@ -707,9 +711,9 @@ describe("useAuth", () => {
         const AssertComponent = () => {
             auth = useAuth();
             return <></>;
-        };        
+        };
         history.push("/non-sign-in-route");
-        
+
         render(
             <Router history={history}>
                 <AuthProvider oidcSettings={oidcSettings} defaultAuthorizedRouteRedirect={defaultAuthorizedRouteRedirect}>
@@ -717,12 +721,12 @@ describe("useAuth", () => {
                 </AuthProvider>
             </Router>
         );
-        // Act        
+        // Act
         act(() => AuthServiceMock.mock.instances[0].onUserUpdated?.call(undefined, false));
-        
+
         // Assert
         expect(auth.defaultAuthorizedRouteRedirect).toBe(defaultAuthorizedRouteRedirect);
-    });    
+    });
 
     test("should provide auth context containing defaultNotAuthorizedRouteRedirect to children in all non-sign-in routes when no prop is given", () => {
         // Arrange
@@ -734,9 +738,9 @@ describe("useAuth", () => {
         const AssertComponent = () => {
             auth = useAuth();
             return <></>;
-        };        
+        };
         history.push("/non-sign-in-route");
-        
+
         render(
             <Router history={history}>
                 <AuthProvider oidcSettings={oidcSettings}>
@@ -744,9 +748,9 @@ describe("useAuth", () => {
                 </AuthProvider>
             </Router>
         );
-        // Act        
+        // Act
         act(() => AuthServiceMock.mock.instances[0].onUserUpdated?.call(undefined, false));
-        
+
         // Assert
         expect(auth.defaultNotAuthorizedRouteRedirect).toBe("/");
     });
@@ -762,9 +766,9 @@ describe("useAuth", () => {
         const AssertComponent = () => {
             auth = useAuth();
             return <></>;
-        };        
+        };
         history.push("/non-sign-in-route");
-        
+
         render(
             <Router history={history}>
                 <AuthProvider oidcSettings={oidcSettings} defaultNotAuthorizedRouteRedirect={defaultNotAuthorizedRouteRedirect}>
@@ -772,9 +776,9 @@ describe("useAuth", () => {
                 </AuthProvider>
             </Router>
         );
-        // Act        
+        // Act
         act(() => AuthServiceMock.mock.instances[0].onUserUpdated?.call(undefined, false));
-        
+
         // Assert
         expect(auth.defaultNotAuthorizedRouteRedirect).toBe(defaultNotAuthorizedRouteRedirect);
     });
@@ -785,10 +789,10 @@ describe("useAuth", () => {
             useAuth();
             return <></>;
         };
-        
+
         // Act
         const act = () => render(<AssertComponent />);
-        
+
         // Assert
         expect(act).toThrowError("useAuth called outside of AuthProvider");
     });

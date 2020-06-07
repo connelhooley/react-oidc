@@ -24,12 +24,12 @@ describe("SignOutButton", () => {
         const tree = (
             <SignOutButton data-testid="assert">Hello</SignOutButton>
         );
-        
+
         render(tree);
-        
+
         // Act
         fireEvent.click(await screen.findByTestId("assert"));
-        
+
         // Assert
         expect(service.startSignOut).toHaveBeenCalledTimes(1);
     });
@@ -56,10 +56,10 @@ describe("SignOutButton", () => {
         const tree = (
             <SignOutButton id={id} className={className}>{content}</SignOutButton>
         );
-        
+
         // Act
         render(tree);
-        
+
         // Assert
         const element = await screen.findByRole("button");
         expect(element).toHaveTextContent(content);
