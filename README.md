@@ -14,7 +14,7 @@
 
 ## About
 
-A few opinionated React components wrapping [oidc-client](https://github.com/IdentityModel/oidc-client-js/).
+A few opinionated React components wrapping [oidc-client](https://github.com/IdentityModel/oidc-client-js/) using the [Hooks API](https://reactjs.org/docs/hooks-intro.html).
 
 ``` bash
 npm install @connelhooley/react-oidc

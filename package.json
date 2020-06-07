@@ -1,7 +1,7 @@
 {
   "name": "@connelhooley/react-oidc",
   "version": "1.0.0-alpha.1",
-  "description": "Basic React components to perform sign in and out using oidc",
+  "description": "A few opinionated React components wrapping oidc-client",
   "scripts": {
     "test": "jest"
   },
