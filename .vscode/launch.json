@@ -1,0 +1,42 @@
+{
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Debug Tests",
+            "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
+            "args": [
+                "--runInBand",
+                "--config",
+                "${workspaceRoot}/jest.config.js"
+            ],
+            "runtimeArgs": [
+                "--nolazy"
+            ],
+            "console": "internalConsole",
+            "env": {
+                "NODE_ENV": "test"
+            }
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Watch Tests",
+            "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
+            "args": [
+                "--runInBand",
+                "--watch",
+                "--config",
+                "${workspaceRoot}/jest.config.js"
+            ],
+            "runtimeArgs": [
+                "--nolazy",
+                "--inspect"
+            ],
+            "console": "internalConsole",
+            "env": {
+                "NODE_ENV": "test"
+            }
+        }
+    ]
+}
