@@ -8,7 +8,9 @@
             "args": [
                 "--runInBand",
                 "--config",
-                "${workspaceRoot}/jest.config.js"
+                "${workspaceRoot}/jest.config.js",
+                "--collectCoverage",
+                "false"
             ],
             "runtimeArgs": [
                 "--nolazy"
@@ -27,7 +29,9 @@
                 "--runInBand",
                 "--watch",
                 "--config",
-                "${workspaceRoot}/jest.config.js"
+                "${workspaceRoot}/jest.config.js",
+                "--collectCoverage",
+                "false"
             ],
             "runtimeArgs": [
                 "--nolazy",
