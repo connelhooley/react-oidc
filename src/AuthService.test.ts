@@ -25,6 +25,7 @@ describe("AuthService()", () => {
         expect(UserManagerMock).toBeCalledTimes(1);
         expect(UserManagerMock).toBeCalledWith(oidcSettings);
         expect(UserManagerMock.mock.instances[0].events.addUserLoaded).toBeCalledTimes(1);
+        expect(UserManagerMock.mock.instances[0].events.addUserUnloaded).toBeCalledTimes(1);
     });
 
     test("should call onUserUpdated when a valid user is loaded", () => {
