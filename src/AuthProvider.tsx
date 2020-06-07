@@ -62,7 +62,7 @@ export function AuthProvider(props: PropsWithChildren<AuthProviderProps>) {
             </Route>
             <Route path="*">
                 <AuthContext.Provider value={state}>
-                    { children }
+                    {children}
                 </AuthContext.Provider>
             </Route>
         </Switch>

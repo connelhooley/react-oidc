@@ -1,6 +1,6 @@
 import React from "react";
 import { createMemoryHistory } from "history";
-import { Router } from "react-router";
+import { Router, Route } from "react-router";
 import { render, screen, act } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
 
@@ -185,6 +185,257 @@ describe("AuthProvider", () => {
         // Assert
         expect(AuthServiceMock.mock.instances[0].initiate).toHaveBeenCalledTimes(1);
         expect(AuthServiceMock.mock.instances[0].onUserUpdated).toBeDefined();
+    });
+
+    test("should complete sign in process in sign-in route when a signInCallbackRoute prop is not given", async () => {
+        // Arrange
+        const oidcSettings: any = {
+            hello: "world",
+        };
+        
+        const redirectRoute = "/some-other-route";
+        jest.spyOn(AuthServiceMock.prototype, "completeSignIn").mockImplementation(() => redirectRoute);
+        
+        const content = "hello, world";
+        const history = createMemoryHistory();        
+        render(
+            <Router history={history}>
+                <AuthProvider oidcSettings={oidcSettings}>
+                    <Route path={redirectRoute}>
+                        <p data-testid="assert">{content}</p>
+                    </Route>
+                </AuthProvider>
+            </Router>
+        );
+        
+        // Act
+        act(() => history.push("/callback"));
+        
+        // Assert
+        expect(AuthServiceMock.mock.instances[0].completeSignIn).toHaveBeenCalledTimes(1);
+        expect(await screen.findByTestId("assert")).toHaveTextContent(content);
+    });
+
+    test("should complete sign in process in sign-in route when a signInCallbackRoute prop is given", async () => {
+        // Arrange
+        const oidcSettings: any = {
+            hello: "world",
+        };
+        const signInCallbackRoute = "/configured-callback";
+        
+        const redirectRoute = "/some-other-route";
+        jest.spyOn(AuthServiceMock.prototype, "completeSignIn").mockImplementation(() => redirectRoute);
+        
+        const content = "hello, world";
+        const history = createMemoryHistory();        
+        render(
+            <Router history={history}>
+                <AuthProvider oidcSettings={oidcSettings} signInCallbackRoute={signInCallbackRoute}>
+                    <Route path={redirectRoute}>
+                        <p data-testid="assert">{content}</p>
+                    </Route>
+                </AuthProvider>
+            </Router>
+        );
+        
+        // Act
+        act(() => history.push(signInCallbackRoute));
+        
+        // Assert
+        expect(AuthServiceMock.mock.instances[0].completeSignIn).toHaveBeenCalledTimes(1);
+        expect(await screen.findByTestId("assert")).toHaveTextContent(content);
+    });
+    
+    test("should not display children while complete sign in process is in-progress", async () => {
+        // Arrange
+        const oidcSettings: any = {
+            hello: "world",
+        };
+        const signInCallbackRoute = "/configured-callback";
+        
+        jest.spyOn(AuthServiceMock.prototype, "completeSignIn").mockImplementation(() => new Promise(() => {}));
+        
+        const content = "hello, world";
+        const history = createMemoryHistory();        
+        render(
+            <Router history={history}>
+                <AuthProvider oidcSettings={oidcSettings} signInCallbackRoute={signInCallbackRoute}>
+                    <p data-testid="assert">{content}</p>
+                </AuthProvider>
+            </Router>
+        );
+        
+        // Act
+        act(() => history.push(signInCallbackRoute));
+        
+        // Assert
+        expect(AuthServiceMock.mock.instances[0].completeSignIn).toHaveBeenCalledTimes(1);
+        expect(screen.queryByTestId("assert")).toBeNull();
+    });
+
+    test("should display loading component while complete sign in process is in-progress if one is given", async () => {
+        // Arrange
+        const oidcSettings: any = {
+            hello: "world",
+        };
+        const signInCallbackRoute = "/configured-callback";
+        const loadingContent = "hello, world";
+        const Loading = () => {
+            return (
+                <p data-testid="loading-assert">{loadingContent}</p>
+            );
+        };
+        
+        jest.spyOn(AuthServiceMock.prototype, "completeSignIn").mockImplementation(() => new Promise(() => {}));
+        
+        const content = "hello, world";
+        const history = createMemoryHistory();        
+        render(
+            <Router history={history}>
+                <AuthProvider oidcSettings={oidcSettings} signInCallbackRoute={signInCallbackRoute} loadingComponentFactory={() => <Loading />}>
+                    <p data-testid="assert">{content}</p>
+                </AuthProvider>
+            </Router>
+        );
+        
+        // Act
+        act(() => history.push(signInCallbackRoute));
+        
+        // Assert
+        expect(AuthServiceMock.mock.instances[0].completeSignIn).toHaveBeenCalledTimes(1);
+        expect(await screen.findByTestId("loading-assert")).toHaveTextContent(loadingContent);
+    });
+
+    test("should display loading component while complete sign in process is in-progress if one is given", async () => {
+        // Arrange
+        const oidcSettings: any = {
+            hello: "world",
+        };
+        const signInCallbackRoute = "/configured-callback";
+        const loadingContent = "hello, world";
+        const Loading = () => {
+            return (
+                <p data-testid="loading-assert">{loadingContent}</p>
+            );
+        };
+        
+        const redirectRoute = "/some-other-route";
+        jest.spyOn(AuthServiceMock.prototype, "completeSignIn").mockImplementation(() => redirectRoute);
+        
+        const content = "hello, world";
+        const history = createMemoryHistory();        
+        render(
+            <Router history={history}>
+                <AuthProvider oidcSettings={oidcSettings} signInCallbackRoute={signInCallbackRoute} loadingComponentFactory={() => <Loading />}>
+                    <p data-testid="assert">{content}</p>
+                </AuthProvider>
+            </Router>
+        );
+        
+        // Act
+        act(() => history.push(signInCallbackRoute));
+        
+        // Assert
+        expect(AuthServiceMock.mock.instances[0].completeSignIn).toHaveBeenCalledTimes(1);
+        expect(await screen.findByTestId("assert")).toHaveTextContent(content);
+        expect(screen.queryByTestId("loading-assert")).toBeNull();
+    });
+    
+    test("should complete silent sign in process in silent-sign-in route when a silentSignInCallbackRoute prop is not given", async () => {
+        // Arrange
+        const oidcSettings: any = {
+            hello: "world",
+        };
+        const loadingContent = "hello, world";
+        const Loading = () => {
+            return (
+                <p data-testid="loading-assert">{loadingContent}</p>
+            );
+        };
+        
+        const content = "hello, world";
+        const history = createMemoryHistory();        
+        render(
+            <Router history={history}>
+                <AuthProvider oidcSettings={oidcSettings} loadingComponentFactory={() => <Loading />}>
+                    <p data-testid="assert">{content}</p>
+                </AuthProvider>
+            </Router>
+        );
+        
+        // Act
+        act(() => history.push("/silent-callback"));
+        
+        // Assert
+        expect(AuthServiceMock.mock.instances[0].completeRefresh).toHaveBeenCalledTimes(1);
+        expect(screen.queryByTestId("assert")).toBeNull();
+        expect(screen.queryByTestId("loading-assert")).toBeNull();
+    });
+
+    test("should complete silent sign in process in silent-sign-in route when a silentSignInCallbackRoute prop is given", async () => {
+        // Arrange
+        const oidcSettings: any = {
+            hello: "world",
+        };
+        const silentSignInCallbackRoute = "/configured-callback";
+        const loadingContent = "hello, world";
+        const Loading = () => {
+            return (
+                <p data-testid="loading-assert">{loadingContent}</p>
+            );
+        };
+        
+        const content = "hello, world";
+        const history = createMemoryHistory();        
+        render(
+            <Router history={history}>
+                <AuthProvider oidcSettings={oidcSettings} silentSignInCallbackRoute={silentSignInCallbackRoute} loadingComponentFactory={() => <Loading />}>
+                    <p data-testid="assert">{content}</p>
+                </AuthProvider>
+            </Router>
+        );
+        
+        // Act
+        act(() => history.push(silentSignInCallbackRoute));
+        
+        // Assert
+        expect(AuthServiceMock.mock.instances[0].completeRefresh).toHaveBeenCalledTimes(1);
+        expect(screen.queryByTestId("assert")).toBeNull();
+        expect(screen.queryByTestId("loading-assert")).toBeNull();
+    });
+
+    test("should not display anything while silent sign in process is in-progress", async () => {
+        // Arrange
+        const oidcSettings: any = {
+            hello: "world",
+        };
+        const silentSignInCallbackRoute = "/configured-callback";
+        const loadingContent = "hello, world";
+        const Loading = () => {
+            return (
+                <p data-testid="loading-assert">{loadingContent}</p>
+            );
+        };
+
+        jest.spyOn(AuthServiceMock.prototype, "completeRefresh").mockImplementation(() => new Promise(() => {}));
+        
+        const content = "hello, world";
+        const history = createMemoryHistory();        
+        render(
+            <Router history={history}>
+                <AuthProvider oidcSettings={oidcSettings} silentSignInCallbackRoute={silentSignInCallbackRoute} loadingComponentFactory={() => <Loading />}>
+                    <p data-testid="assert">{content}</p>
+                </AuthProvider>
+            </Router>
+        );
+        
+        // Act
+        act(() => history.push(silentSignInCallbackRoute));
+        
+        // Assert
+        expect(AuthServiceMock.mock.instances[0].completeRefresh).toHaveBeenCalledTimes(1);
+        expect(screen.queryByTestId("assert")).toBeNull();
+        expect(screen.queryByTestId("loading-assert")).toBeNull();
     });
 });
 
