@@ -1,32 +1,29 @@
 # React OIDC
 
-- [React OIDC](#react-oidc)
-  - [About](#about)
-  - [Auth](#auth)
-  - [Authorized](#authorized)
-  - [NotAuthorized](#notauthorized)
-  - [Authorizing](#authorizing)
-  - [AuthorizedRoute](#authorizedroute)
-  - [NotAuthorizedRoute](#notauthorizedroute)
-  - [SignInButton](#signinbutton)
-  - [SignOutButton](#signoutbutton)
-  - [useUser](#useuser)
-
-## About
-
 A few opinionated React components wrapping [oidc-client](https://github.com/IdentityModel/oidc-client-js/) using the [Hooks API](https://reactjs.org/docs/hooks-intro.html).
 
 ``` bash
 npm install @connelhooley/react-oidc
 ```
 
-To use this plugin, the oidc server you are interacting which must supply the following additional claims:
+To use this plugin, the oidc server you are interacting with must supply the following additional claims:
 
 - `name`
 - `email`
 - `role`
 
-## Auth
+- [React OIDC](#react-oidc)
+- [AuthProvider](#authprovider)
+- [useUser](#useuser)
+- [Authorized](#authorized)
+- [NotAuthorized](#notauthorized)
+- [Authorizing](#authorizing)
+- [AuthorizedRoute](#authorizedroute)
+- [NotAuthorizedRoute](#notauthorizedroute)
+- [SignInButton](#signinbutton)
+- [SignOutButton](#signoutbutton)
+
+# AuthProvider
 
 All other components in this library must be placed inside a single `AuthProvider` component. Place this component as close to your root component as possible but under a react router. The `AuthProvider` component handles sign-in callback routes. All other routes should be handled by its children. It also sets up the user context so information about the logged in user can be accessed by its children, see [useUser](#useuser) for more information.
 
@@ -54,7 +51,7 @@ export function App() {
                 signInCallbackFallbackRoute="/"
                 defaultAuthorizedRouteRedirect="/"
                 defaultNotAuthorizedRouteRedirect="/"
-                loadingComponentFactory= {() => <p>Loading</p>}>
+                loadingComponentFactory= {() => <Loading />}>
                     <Switch>
                         <Route exact path="/">
                             <HomePage />
@@ -74,7 +71,55 @@ export function App() {
 - The `defaultNotAuthorizedRouteRedirect` prop is the route the user is redirected to, when they try an access a "not authorized" route and they are signed in. See [NotAuthorizedRoute](#notauthorizedroute) for more information. Defaults to `"/"`.
 - The `loadingComponentFactory` prop is a function that returns the component to be rendered when the user is completing the sign in process. This is optional, if it is not provided no element is rendered.
 
-## Authorized
+# useUser
+
+Returns information about the signed in user. The returned object can be either:
+
+- An `object` containing information about the user when the user is signed in.
+- `false` when the user is not signed in.
+- `undefined` when the user is signing in.
+
+``` js
+export function HomePage() {
+    const user = useUser();
+    if (user) {
+        return (
+            <h1>Signed in</h1>
+            <p>{user.id}</p>
+            <p>{user.name}</p>
+            <p>{user.email}</p>
+            <p>{user.role}</p>
+            <p>{user.token}</p>
+        );
+    } else if (user == false) {
+        return (
+            <h1>Not signed in</h1>
+        );
+    } else {
+        return (
+            <h1>Signing in</h1>
+        );
+    }
+}
+```
+
+The user object contains the user's token and this can be used to create `Authorization` bearer headers in HTTP clients, below is a quick example using fetch:
+
+``` js
+const user = useUser();
+const authHeader = user
+    ? { "Authorization": `Bearer ${user.token}` }
+    : undefined;
+const res = await fetch("https://example.com", {
+    method: "GET",
+    headers: {
+        "Accept": "application/json",
+        ...(authHeader ?? {}),
+    },
+});
+```
+
+# Authorized
 
 Only renders its children if the user is authenticated.
 
@@ -103,7 +148,7 @@ export function Example() {
 }
 ```
 
-## NotAuthorized
+# NotAuthorized
 
 Only renders its children if the user is not authenticated.
 
@@ -117,7 +162,7 @@ export function Example() {
 }
 ```
 
-## Authorizing
+# Authorizing
 
 Only renders its children if the user is currently signing in.
 
@@ -131,7 +176,7 @@ export function Example() {
 }
 ```
 
-## AuthorizedRoute
+# AuthorizedRoute
 
 Only renders its children if its route is matched and the user is currently signed in. If the user is not signed in, the component redirects to the `defaultAuthorizedRouteRedirect` value specified in the parent `AuthProviderRouter`s props.
 
@@ -170,7 +215,7 @@ export function Routes() {
 }
 ```
 
-## NotAuthorizedRoute
+# NotAuthorizedRoute
 
 Only renders its children if its route is matched and the user is not currently signed in. If the user is signed in, the component redirects to the `defaultNotAuthorizedRouteRedirect` value specified in the parent `AuthProviderRouter`s props.
 
@@ -209,7 +254,7 @@ export function Routes() {
 }
 ```
 
-## SignInButton
+# SignInButton
 
 Starts sign in process by redirecting the user when clicked.
 
@@ -223,7 +268,7 @@ export function Nav() {
 
 All props are passed down to the underlying button meaning the component can be styled using CSS-in-JS libraries such as `styled-components`.
 
-## SignOutButton
+# SignOutButton
 
 Starts sign out process by redirecting the user when clicked.
 
@@ -236,51 +281,3 @@ export function Nav() {
 ```
 
 All props are passed down to the underlying button meaning the component can be styled using CSS-in-JS libraries such as `styled-components`.
-
-## useUser
-
-Returns information about the signed in user. The returned object can be either:
-
-- An `object` containing information about the user when the user is signed in.
-- `false` when the user is not signed in.
-- `undefined` when the user is signing in.
-
-``` js
-export function User() {
-    const user = useUser();
-    if (user) {
-        return (
-            <h1>Signed in</h1>
-            <p>{user.id}</p>
-            <p>{user.name}</p>
-            <p>{user.email}</p>
-            <p>{user.role}</p>
-            <p>{user.token}</p>
-        );
-    } else if (user == false) {
-        return (
-            <h1>Not signed in</h1>
-        );
-    } else {
-        return (
-            <h1>Signing in</h1>
-        );
-    }
-}
-```
-
-The user object contains the user's token and this can be used to create `Authorization` bearer headers in HTTP clients, below is a quick example using fetch:
-
-``` js
-const user = useUser();
-const authHeader = user
-    ? { "Authorization": `Bearer ${user.token}` }
-    : undefined;
-const res = await fetch("https://example.com", {
-    method: "GET",
-    headers: {
-        "Accept": "application/json",
-        ...(authHeader ?? {}),
-    },
-});
-```
