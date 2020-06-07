@@ -48,7 +48,7 @@ export class AuthService {
     }
 
     public async completeSignIn(): Promise<string> {
-        try 
+        try
         {
             const oidcUser = await this.userManager.signinRedirectCallback();
             return oidcUser?.state?.returnUrl ?? this.signInCallbackFallbackRoute;
@@ -70,7 +70,7 @@ export class AuthService {
     private mapUser(user?: OidcUser): User|false {
         if (user?.expired) {
             return false;
-        } else if (user?.profile && user?.profile?.name && user?.profile?.email && user?.profile?.role) {
+        } else if (user?.profile?.name && user?.profile?.email && user?.profile?.role) {
             const mappedUser = {
                 id: user.profile.sub,
                 token: user.access_token,

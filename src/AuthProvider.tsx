@@ -4,7 +4,6 @@ import { Redirect, Route, Switch } from "react-router";
 
 import { AuthService, User } from "./AuthService";
 
-
 interface AuthContextValue {
     service: AuthService;
     user?: User|false;
