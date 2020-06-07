@@ -1,8 +1,9 @@
-import React, { PropsWithChildren, useState, useEffect, createContext, useContext } from "react";
-import { Switch, Route, Redirect } from "react-router";
 import { UserManagerSettings } from "oidc-client";
+import React, { PropsWithChildren, createContext, useContext, useEffect, useState } from "react";
+import { Redirect, Route, Switch } from "react-router";
 
 import { AuthService, User } from "./AuthService";
+
 
 interface AuthContextValue {
     service: AuthService;

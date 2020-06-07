@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React from "react";
-import { createMemoryHistory } from "history";
-import { Router, Route } from "react-router";
-import { render, screen, act } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
+import { render, screen, act } from "@testing-library/react";
+import { createMemoryHistory } from "history";
+import React from "react";
+import { Router, Route } from "react-router";
 
 import { AuthProvider, useUser, useAuth } from "./AuthProvider";
 import { AuthService } from "./AuthService";

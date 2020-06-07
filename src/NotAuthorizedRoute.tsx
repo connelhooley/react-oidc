@@ -1,10 +1,10 @@
 import React from "react";
 import { Route, RouteProps, Redirect } from "react-router";
 
-import { NotAuthorized } from "./NotAuthorized";
 import { Authorized } from "./Authorized";
-import { useAuth } from "./AuthProvider";
 import { Authorizing } from "./Authorizing";
+import { useAuth } from "./AuthProvider";
+import { NotAuthorized } from "./NotAuthorized";
 
 export interface NotAuthorizedRouteProps {
     redirect?: string;
