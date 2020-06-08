@@ -34,6 +34,33 @@ describe("AuthService()", () => {
         expect(UserManagerMock.mock.instances[0].events.addUserUnloaded).toBeCalledTimes(1);
     });
 
+    test("should not call onUserUpdated when the user is loaded but onUserUpdated is undefined", () => {
+        // Arrange
+        let capturedCallback: any;
+        jest.spyOn(UserManagerMock.prototype.events, "addUserLoaded").mockImplementation((callback: any) => {
+            capturedCallback = callback;
+        });
+        const oidcSettings: any = {
+            hello: "world",
+        };
+        const oidcUser: any = {
+            access_token: "some token",
+            profile: {
+                sub: "some id",
+                name: "some name",
+                email: "some email",
+                role: "some role",
+            },
+        };
+        new AuthService(oidcSettings, "/fallback");
+
+        // Act
+        const act = () => capturedCallback(oidcUser);
+
+        // Assert
+        expect(act).not.toThrow();
+    });
+
     test("should call onUserUpdated when a valid user is loaded", () => {
         // Arrange
         let capturedCallback: any;
@@ -184,7 +211,7 @@ describe("AuthService()", () => {
     test("should call onUserUpdated when the user is unloaded", () => {
         // Arrange
         let capturedCallback: any;
-        jest.spyOn(UserManagerMock.prototype.events, "addUserLoaded").mockImplementation((callback: any) => {
+        jest.spyOn(UserManagerMock.prototype.events, "addUserUnloaded").mockImplementation((callback: any) => {
             capturedCallback = callback;
         });
         const oidcSettings: any = {
@@ -200,9 +227,43 @@ describe("AuthService()", () => {
         expect(service.onUserUpdated).toBeCalledTimes(1);
         expect(service.onUserUpdated).toBeCalledWith(false);
     });
+
+    test("should not call onUserUpdated when the user is unloaded but onUserUpdated is undefined", () => {
+        // Arrange
+        let capturedCallback: any;
+        jest.spyOn(UserManagerMock.prototype.events, "addUserLoaded").mockImplementation((callback: any) => {
+            capturedCallback = callback;
+        });
+        const oidcSettings: any = {
+            hello: "world",
+        };
+        const service = new AuthService(oidcSettings, "/fallback");
+        service.onUserUpdated = jest.fn();
+
+        // Act
+        const act = () => capturedCallback();
+
+        // Assert
+        expect(act).not.toThrow();
+    });
 });
 
 describe("AuthService.initiate", () => {
+    test("should not call onUserUpdated when user manager doesn't contain a user and onUserUpdated is undefined", async () => {
+        /// Arrange
+        const oidcUser: any = undefined;
+         jest.spyOn(UserManagerMock.prototype, "getUser").mockImplementation(() => Promise.resolve(oidcUser));
+        const oidcSettings: any = {
+            hello: "world",
+        };
+        const service = new AuthService(oidcSettings, "/fallback");
+
+        // Act
+        const act = () => service.initiate();
+
+        // Assert
+        expect(act).not.toThrow();
+    });
     test("should call onUserUpdated when user manager doesn't contain a user", async () => {
         /// Arrange
         const oidcUser: any = undefined;
@@ -219,6 +280,35 @@ describe("AuthService.initiate", () => {
         // Assert
         expect(service.onUserUpdated).toBeCalledTimes(1);
         expect(service.onUserUpdated).toBeCalledWith(false);
+    });
+
+    test("should not call onUserUpdated with refreshed user when user manager contains an expired user and onUserUpdated is undefined", async () => {
+        // Arrange
+        const oidcUser: any = {
+            expired: true,
+        };
+        const refreshedOidcUser: any = {
+            access_token: "some token",
+            profile: {
+                sub: "some id",
+                name: "some name",
+                email: "some email",
+                role: "some role",
+            },
+        };
+        jest.spyOn(UserManagerMock.prototype, "getUser").mockImplementation(() => Promise.resolve(oidcUser));
+        jest.spyOn(UserManagerMock.prototype, "signinSilent").mockImplementation(() => Promise.resolve(refreshedOidcUser));
+
+        const oidcSettings: any = {
+            hello: "world",
+        };
+        const service = new AuthService(oidcSettings, "/fallback");
+
+        // Act
+        const act = async () => await service.initiate();
+
+        // Assert
+        expect(act).not.toThrow();
     });
 
     test("should call onUserUpdated with refreshed user when user manager contains an expired user", async () => {
@@ -353,33 +443,30 @@ describe("AuthService.initiate", () => {
         expect(service.onUserUpdated).toBeCalledWith(false);
     });
 
+    test("should not call onUserUpdated when user manager contains a valid user and onUserUpdated is undefined", async () => {
+        // Arrange
+        const oidcUser: any = {
+            access_token: "some token",
+            profile: {
+                sub: "some id",
+                name: "some name",
+                email: "some email",
+                role: "some role",
+            },
+        };
+        jest.spyOn(UserManagerMock.prototype, "getUser").mockImplementation(() => Promise.resolve(oidcUser));
 
+        const oidcSettings: any = {
+            hello: "world",
+        };
+        const service = new AuthService(oidcSettings, "/fallback");
 
+        // Act
+        const act = async () => await service.initiate();
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        // Assert
+        expect(act).not.toThrow();
+    });
 
     test("should call onUserUpdated when user manager contains a valid user", async () => {
         // Arrange
@@ -582,51 +669,222 @@ describe("AuthService.initiate", () => {
     });
 });
 
-// describe("AuthService.startSignIn", () => {
-//     test("should call start sign in", () => {
-        
-//     });
-//     test("should await sign in process", () => {
-        
-//     });
-// });
+describe("AuthService.startSignIn", () => {
+    test("should call start sign in", async () => {
+        // Arrange
+        const oidcSettings: any = {
+            hello: "world",
+        };
+        const service = new AuthService(oidcSettings, "/fallback");
+        const returnUrl = "/some-path";
 
-// describe("AuthService.completeSignIn", () => {
-//     test("should complete sign in process and return returnUrl if one is available", () => {
-        
-//     });
+        // Act
+        await service.startSignIn(returnUrl);
 
-//     test("should complete sign in process and return signInCallbackFallbackRoute if signinRedirectCallback throws", () => {
-        
-//     });
+        // Assert
+        expect(UserManagerMock.mock.instances[0].signinRedirect).toBeCalledTimes(1);
+        expect(UserManagerMock.mock.instances[0].signinRedirect).toBeCalledWith({ data: { returnUrl } });
+    });
 
-//     test("should complete sign in process and return signInCallbackFallbackRoute if signinRedirectCallback returns a falsey value", () => {
-        
-//     });
+    test("should await sign in process", async () => {
+        // Arrange
+        const callOrder = [];
+        jest.spyOn(UserManagerMock.prototype, "signinRedirect").mockImplementation(() => new Promise(resolve => {
+            setTimeout(() => {
+                callOrder.push("signinRedirect");
+                resolve();
+            }, 0);
+        }));
+        const oidcSettings: any = {
+            hello: "world",
+        };
+        const service = new AuthService(oidcSettings, "/fallback");
+        const returnUrl = "/some-path";
+        callOrder.push("startSignIn - before");
 
-//     test("should complete sign in process and return signInCallbackFallbackRoute if signinRedirectCallback returns a falsey state value", () => {
-        
-//     });
+        // Act
+        await service.startSignIn(returnUrl);
 
-//     test("should complete sign in process and return signInCallbackFallbackRoute if signinRedirectCallback returns a falsey state retrunUrl value", () => {
-        
-//     });
-// });
+        // Assert
+        callOrder.push("startSignIn - after");
+        expect(callOrder).toEqual([
+            "startSignIn - before",
+            "signinRedirect",
+            "startSignIn - after",
+        ]);
+    });
+});
 
-// describe("AuthService.startSignOut", () => {
-//     test("should call start sign out", () => {
-        
-//     });
-//     test("should await sign out process", () => {
-        
-//     });
-// });
+describe("AuthService.completeSignIn", () => {
+    test("should complete sign in process and return returnUrl if one is available", async () => {
+        // Arrange
+        const expected = "some return url";
+        jest.spyOn(UserManagerMock.prototype, "signinRedirectCallback").mockImplementation(() => ({
+            state: { returnUrl: expected }
+        }));
+        const oidcSettings: any = {
+            hello: "world",
+        };
+        const service = new AuthService(oidcSettings, "/fallback");
 
-// describe("AuthService.completeRefresh", () => {
-//     test("should call complete silent sign in", () => {
-        
-//     });
-//     test("should await silent sign in", () => {
-        
-//     });
-// });
+        // Act
+        const result = await service.completeSignIn();
+
+        // Assert
+        expect(result).toBe(expected);
+    });
+
+    test("should complete sign in process and return signInCallbackFallbackRoute if signinRedirectCallback throws", async () => {
+        // Arrange
+        jest.spyOn(UserManagerMock.prototype, "signinRedirectCallback").mockImplementation(() => Promise.reject("some error"));
+        const oidcSettings: any = {
+            hello: "world",
+        };
+        const expected = "some return url";
+        const service = new AuthService(oidcSettings, expected);
+
+        // Act
+        const result = await service.completeSignIn();
+
+        // Assert
+        expect(result).toBe(expected);
+    });
+
+    test("should complete sign in process and return signInCallbackFallbackRoute if signinRedirectCallback returns a falsey value", async () => {
+        // Arrange
+        jest.spyOn(UserManagerMock.prototype, "signinRedirectCallback").mockImplementation(() => Promise.resolve(undefined));
+        const oidcSettings: any = {
+            hello: "world",
+        };
+        const expected = "some return url";
+        const service = new AuthService(oidcSettings, expected);
+
+        // Act
+        const result = await service.completeSignIn();
+
+        // Assert
+        expect(result).toBe(expected);
+    });
+
+    test("should complete sign in process and return signInCallbackFallbackRoute if signinRedirectCallback returns a falsey state value", async () => {
+        // Arrange
+        jest.spyOn(UserManagerMock.prototype, "signinRedirectCallback").mockImplementation(() => ({
+            state: undefined,
+        }));
+        const oidcSettings: any = {
+            hello: "world",
+        };
+        const expected = "some return url";
+        const service = new AuthService(oidcSettings, expected);
+
+        // Act
+        const result = await service.completeSignIn();
+
+        // Assert
+        expect(result).toBe(expected);
+    });
+
+    test("should complete sign in process and return signInCallbackFallbackRoute if signinRedirectCallback returns a falsey state returnUrl value", async () => {
+        // Arrange
+        jest.spyOn(UserManagerMock.prototype, "signinRedirectCallback").mockImplementation(() => ({
+            state: { returnUrl: undefined },
+        }));
+        const oidcSettings: any = {
+            hello: "world",
+        };
+        const expected = "some return url";
+        const service = new AuthService(oidcSettings, expected);
+
+        // Act
+        const result = await service.completeSignIn();
+
+        // Assert
+        expect(result).toBe(expected);
+    });
+});
+
+describe("AuthService.startSignOut", () => {
+    test("should call start sign out", async () => {
+        // Arrange
+        const oidcSettings: any = {
+            hello: "world",
+        };
+        const service = new AuthService(oidcSettings, "/fallback");
+
+        // Act
+        await service.startSignOut();
+
+        // Assert
+        expect(UserManagerMock.mock.instances[0].signoutRedirect).toBeCalledTimes(1);
+    });
+
+    test("should await sign out process", async () => {
+        // Arrange
+        const callOrder = [];
+        jest.spyOn(UserManagerMock.prototype, "signoutRedirect").mockImplementation(() => new Promise(resolve => {
+            setTimeout(() => {
+                callOrder.push("signoutRedirect");
+                resolve();
+            }, 0);
+        }));
+        const oidcSettings: any = {
+            hello: "world",
+        };
+        const service = new AuthService(oidcSettings, "/fallback");
+        callOrder.push("startSignOut - before");
+
+        // Act
+        await service.startSignOut();
+
+        // Assert
+        callOrder.push("startSignOut - after");
+        expect(callOrder).toEqual([
+            "startSignOut - before",
+            "signoutRedirect",
+            "startSignOut - after",
+        ]);
+    });
+});
+
+describe("AuthService.completeRefresh", () => {
+    test("should call complete silent sign in", async () => {
+        // Arrange
+        const oidcSettings: any = {
+            hello: "world",
+        };
+        const service = new AuthService(oidcSettings, "/fallback");
+
+        // Act
+        await service.completeRefresh();
+
+        // Assert
+        expect(UserManagerMock.mock.instances[0].signinSilentCallback).toBeCalledTimes(1);
+    });
+
+    test("should await silent sign in", async () => {
+        // Arrange
+        const callOrder = [];
+        jest.spyOn(UserManagerMock.prototype, "signinSilentCallback").mockImplementation(() => new Promise(resolve => {
+            setTimeout(() => {
+                callOrder.push("signinSilentCallback");
+                resolve();
+            }, 0);
+        }));
+        const oidcSettings: any = {
+            hello: "world",
+        };
+        const service = new AuthService(oidcSettings, "/fallback");
+        callOrder.push("completeRefresh - before");
+
+        // Act
+        await service.completeRefresh();
+
+        // Assert
+        callOrder.push("completeRefresh - after");
+        expect(callOrder).toEqual([
+            "completeRefresh - before",
+            "signinSilentCallback",
+            "completeRefresh - after",
+        ]);
+    });
+});
