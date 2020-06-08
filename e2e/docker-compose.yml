@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+    chrome:
+        container_name: chrome
+        image: selenium/standalone-chrome:3.141.59-20200525
+        volumes:
+          - /dev/shm:/dev/shm
+        ports:
+          - 4444:4444
+    example-spa:
+      container_name: example-spa
+      context: ./ExampleSpa
+      dockerfile: ./ExampleSpa/Dockerfile
+      ports:
+        - 5000:80      
+    auth-server:
+      container_name: auth-server
+      context: ./AuthServer
+      dockerfile: ./AuthServer/Dockerfile
+      ports:
+        - 5001:80

@@ -4,6 +4,7 @@
   "description": "A few opinionated React components wrapping oidc-client",
   "scripts": {
     "build": "tsc",
+    "prepublishOnly": "tsc",
     "test": "jest"
   },
   "main": "dist/index.js",
