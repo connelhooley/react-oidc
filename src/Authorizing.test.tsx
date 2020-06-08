@@ -1,5 +1,5 @@
 import "@testing-library/jest-dom/extend-expect";
-import { render, screen } from "@testing-library/react";
+import { render, screen, cleanup } from "@testing-library/react";
 import React from "react";
 
 import { Authorizing } from "./Authorizing";
@@ -8,6 +8,8 @@ import { useUser } from "./AuthProvider";
 jest.mock("./AuthProvider");
 
 const useUserMock = useUser as jest.MockedFunction<typeof useUser>;
+
+afterEach(cleanup);
 
 describe("Authorizing", () => {
     test("should not render children when user is signed in", async () => {

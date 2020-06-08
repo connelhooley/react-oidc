@@ -1,5 +1,5 @@
 import "@testing-library/jest-dom/extend-expect";
-import { render, screen } from "@testing-library/react";
+import { render, screen, cleanup } from "@testing-library/react";
 import { createMemoryHistory } from "history";
 import React from "react";
 import { Route, Router, Switch } from "react-router";
@@ -14,6 +14,8 @@ jest.mock("./AuthProvider");
 const AuthServiceMock = AuthService as jest.Mock<AuthService>;
 const useAuthMock = useAuth as jest.MockedFunction<typeof useAuth>;
 const useUserMock = useUser as jest.MockedFunction<typeof useUser>;
+
+afterEach(cleanup);
 
 describe("AuthorizedRoute", () => {
     test("should render route when user is signed in", async () => {

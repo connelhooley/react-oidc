@@ -1,5 +1,5 @@
 import "@testing-library/jest-dom/extend-expect";
-import { render, fireEvent, screen } from "@testing-library/react";
+import { render, fireEvent, screen, cleanup } from "@testing-library/react";
 import React from "react";
 
 import { useAuth } from "./AuthProvider";
@@ -11,6 +11,8 @@ jest.mock("./AuthProvider");
 
 const AuthServiceMock = AuthService as jest.Mock<AuthService>;
 const useAuthMock = useAuth as jest.MockedFunction<typeof useAuth>;
+
+afterEach(cleanup);
 
 describe("SignOutButton", () => {
     test("should start sign out on button click", async () => {

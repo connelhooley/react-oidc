@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { cleanup } from "@testing-library/react";
 import { UserManager } from "oidc-client";
 
 import { AuthService } from "./AuthService";
@@ -6,6 +7,8 @@ import { AuthService } from "./AuthService";
 jest.mock("oidc-client");
 
 const UserManagerMock = UserManager as jest.Mock<UserManager>;
+
+afterEach(cleanup);
 
 describe("AuthService()", () => {
     test("should create an instance of UserManager with correct settings", () => {

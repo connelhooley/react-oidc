@@ -1,5 +1,5 @@
 import "@testing-library/jest-dom/extend-expect";
-import { render, fireEvent, screen } from "@testing-library/react";
+import { render, fireEvent, screen, cleanup } from "@testing-library/react";
 import { createMemoryHistory } from "history";
 import React from "react";
 import { Router } from "react-router";
@@ -13,6 +13,8 @@ jest.mock("./AuthProvider");
 
 const AuthServiceMock = AuthService as jest.Mock<AuthService>;
 const useAuthMock = useAuth as jest.MockedFunction<typeof useAuth>;
+
+afterEach(cleanup);
 
 describe("SignInButton", () => {
     test("should start sign in on button click", async () => {

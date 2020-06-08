@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import "@testing-library/jest-dom/extend-expect";
-import { render, screen, act } from "@testing-library/react";
+import { render, screen, act, cleanup } from "@testing-library/react";
 import { createMemoryHistory } from "history";
 import React from "react";
 import { Router, Route } from "react-router";
@@ -14,6 +14,8 @@ const AuthServiceMock = AuthService as jest.Mock<AuthService>;
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const noop = () => {};
+
+afterEach(cleanup);
 
 describe("AuthProvider", () => {
     test("should create and initialise AuthService on first render", () => {
