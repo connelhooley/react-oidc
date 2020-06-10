@@ -20,7 +20,7 @@ All other components in this library must be placed inside a single `AuthProvide
 export function App() {
     const oidcSettings = {
         authority: "https://example-authority.com",
-        client_id: "example-client-d",
+        client_id: "example-client-id",
         response_type: "code",
         response_mode: "query",
         scope: "openid profile another-example-scope",

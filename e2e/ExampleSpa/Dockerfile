@@ -1,17 +1,8 @@
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build-env
-ARG Configuration=Release
-
+FROM node:13.6
 WORKDIR /app
-
-COPY package.json package-lock.json ./
-
-RUN npm ci
-
-COPY . ./
-
-RUN npm run build
-
-FROM nginx:1.17
-COPY --from=build-env /app/vhosts.conf /etc/nginx/conf.d/default.conf
-COPY --from=build-env /app/build/ /usr/share/nginx/html/
-CMD ["nginx", "-g", "daemon off;"]
+ENV PATH /app/node_modules/.bin:$PATH
+COPY . .
+RUN npm install --silent
+RUN npm install react-scripts@3.4.1 -g --silent
+ENV CI=true
+ENTRYPOINT [ "npm", "start" ]

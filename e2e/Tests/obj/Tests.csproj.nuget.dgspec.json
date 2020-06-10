@@ -1,29 +1,34 @@
 {
   "format": 1,
   "restore": {
-    "/mnt/c/_Code/github/connelhooley/react-oidc/e2e/Tests/Tests.csproj": {}
+    "C:\\_Code\\github\\connelhooley\\react-oidc\\e2e\\Tests\\Tests.csproj": {}
   },
   "projects": {
-    "/mnt/c/_Code/github/connelhooley/react-oidc/e2e/Tests/Tests.csproj": {
+    "C:\\_Code\\github\\connelhooley\\react-oidc\\e2e\\Tests\\Tests.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/mnt/c/_Code/github/connelhooley/react-oidc/e2e/Tests/Tests.csproj",
+        "projectUniqueName": "C:\\_Code\\github\\connelhooley\\react-oidc\\e2e\\Tests\\Tests.csproj",
         "projectName": "Tests",
-        "projectPath": "/mnt/c/_Code/github/connelhooley/react-oidc/e2e/Tests/Tests.csproj",
-        "packagesPath": "/home/connelhooley/.nuget/packages/",
-        "outputPath": "/mnt/c/_Code/github/connelhooley/react-oidc/e2e/Tests/obj/",
+        "projectPath": "C:\\_Code\\github\\connelhooley\\react-oidc\\e2e\\Tests\\Tests.csproj",
+        "packagesPath": "C:\\Users\\conne\\.nuget\\packages\\",
+        "outputPath": "C:\\_Code\\github\\connelhooley\\react-oidc\\e2e\\Tests\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
-          "/home/connelhooley/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\conne\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
-          "netcoreapp3.0"
+          "netcoreapp3.1"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "netcoreapp3.0": {
+          "netcoreapp3.1": {
             "projectReferences": {}
           }
         },
@@ -34,15 +39,27 @@
         }
       },
       "frameworks": {
-        "netcoreapp3.0": {
+        "netcoreapp3.1": {
           "dependencies": {
+            "FluentAssertions": {
+              "target": "Package",
+              "version": "[5.10.3, )"
+            },
             "Microsoft.NET.Test.Sdk": {
               "target": "Package",
               "version": "[16.2.0, )"
             },
+            "Polly": {
+              "target": "Package",
+              "version": "[7.2.1, )"
+            },
+            "Selenium.Support": {
+              "target": "Package",
+              "version": "[3.141.0, )"
+            },
             "Selenium.WebDriver": {
               "target": "Package",
-              "version": "(, )"
+              "version": "[3.141.0, )"
             },
             "coverlet.collector": {
               "target": "Package",
@@ -72,7 +89,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/3.0.100/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.100\\RuntimeIdentifierGraph.json"
         }
       }
     }
