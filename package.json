@@ -1,6 +1,6 @@
 {
   "name": "@connelhooley/react-oidc",
-  "version": "1.0.0-alpha.3",
+  "version": "1.0.0",
   "description": "A few opinionated React components wrapping oidc-client",
   "scripts": {
     "build": "tsc",
