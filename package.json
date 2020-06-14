@@ -1,7 +1,9 @@
 {
   "name": "@connelhooley/react-oidc",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A few opinionated React components wrapping oidc-client",
+  "repository": "github:connelhooley/react-oidc",
+  "homepage": "https://github.com/connelhooley/react-oidc",
   "scripts": {
     "build": "tsc",
     "prepublishOnly": "tsc",
