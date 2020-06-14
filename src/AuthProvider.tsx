@@ -1,6 +1,6 @@
 import { UserManagerSettings } from "oidc-client";
 import React, { PropsWithChildren, createContext, useContext, useEffect, useState } from "react";
-import { Redirect, Route, Switch } from "react-router";
+import { Redirect, Route, Switch } from "react-router-dom";
 
 import { AuthService, User } from "./AuthService";
 

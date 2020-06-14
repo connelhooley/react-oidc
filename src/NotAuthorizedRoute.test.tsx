@@ -2,7 +2,7 @@ import "@testing-library/jest-dom/extend-expect";
 import { render, screen, cleanup } from "@testing-library/react";
 import { createMemoryHistory } from "history";
 import React from "react";
-import { Switch, Router, Route } from "react-router";
+import { Switch, Router, Route } from "react-router-dom";
 
 import { useAuth, useUser } from "./AuthProvider";
 import { AuthService } from "./AuthService";

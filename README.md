@@ -14,7 +14,7 @@ To use this plugin, the oidc server you are interacting with must supply the fol
 
 # AuthProvider
 
-All other components in this library must be placed inside a single `AuthProvider` component. Place this component as close to your root component as possible but under a react router. The `AuthProvider` component handles sign-in callback routes. All other routes should be handled by its children. It also sets up the user context so information about the logged in user can be accessed by its children, see [useUser](#useuser) for more information.
+All other components in this library must be placed inside a single `AuthProvider` component. Place this component as close to your root component as possible but under a `BrowserRouter`. The `AuthProvider` component handles sign-in callback routes. All other routes should be handled by its children. It also sets up the user context so information about the logged in user can be accessed by its children, see [useUser](#useuser) for more information.
 
 ``` jsx
 export function App() {
