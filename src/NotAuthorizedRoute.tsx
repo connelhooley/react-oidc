@@ -1,28 +1,23 @@
 import React from "react";
 import { Route, RouteProps, Redirect } from "react-router-dom";
 
-import { Authorized } from "./Authorized";
-import { Authorizing } from "./Authorizing";
 import { useAuth } from "./AuthProvider";
-import { NotAuthorized } from "./NotAuthorized";
 
 export interface NotAuthorizedRouteProps {
     redirect?: string;
+    role?: string;
 }
 
 export function NotAuthorizedRoute(props: NotAuthorizedRouteProps & RouteProps): JSX.Element {
-    const { defaultNotAuthorizedRouteRedirect } = useAuth();
-    return (
-        <Route {...props}>
-            <NotAuthorized>
-                {props.children}
-            </NotAuthorized>
-            <Authorized>
-                <Redirect to={props.redirect ?? defaultNotAuthorizedRouteRedirect} />
-            </Authorized>
-            <Authorizing>
-                <Redirect to={props.redirect ?? defaultNotAuthorizedRouteRedirect} />
-            </Authorizing>
-        </Route>
-    );
+    const { defaultNotAuthorizedRouteRedirect, user } = useAuth();
+    const {redirect, role, ...routeProps} = props;
+    if (user === false || (role && user && user.role !== role)) {
+        return (
+            <Route {...routeProps}>{props.children}</Route>
+        );
+    } else {
+        return (
+            <Redirect to={redirect ?? defaultNotAuthorizedRouteRedirect} />
+        );
+    }
 }
