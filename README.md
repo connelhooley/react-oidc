@@ -151,6 +151,21 @@ export function Example() {
 }
 ```
 
+You can also provide a role and the `NotAuthorized` component will render its children if the user is unauthenticated or authenticated with a different role.
+
+``` jsx
+export function Example() {
+    return (
+        <NotAuthorized role="admin">
+            <p>The user is either signed out or is signed in but is not an admin</p>
+        </NotAuthorized>
+        <NotAuthorized role="customer">
+            <p>The user is either signed out or is signed in but is not an customer</p>
+        </NotAuthorized>
+    );
+}
+```
+
 # Authorizing
 
 Only renders its children if the user is currently signing in.
@@ -270,3 +285,15 @@ export function Nav() {
 ```
 
 All props are passed down to the underlying button meaning the component can be styled using CSS-in-JS libraries such as `styled-components`.
+
+# SignIn
+
+Starts the sign in process by redirecting as soon as it is rendered.
+
+``` js
+export function SignInRoute() {
+    return (
+        <SignIn>Loading...</SignIn>
+    );
+}
+```
