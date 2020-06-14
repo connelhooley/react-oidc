@@ -1,6 +1,6 @@
 {
   "name": "@connelhooley/react-oidc",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A few opinionated React components wrapping oidc-client",
   "scripts": {
     "build": "tsc",
@@ -16,6 +16,7 @@
   },
   "peerDependencies": {
     "react": ">= 16.13.1",
+    "react-dom": "^16.13.1",
     "react-router": ">= 5.2.0"
   },
   "devDependencies": {
