@@ -9,3 +9,5 @@ export * from "./NotAuthorizedRoute";
 
 export * from "./SignInButton";
 export * from "./SignOutButton";
+
+export * from "./SignIn";
