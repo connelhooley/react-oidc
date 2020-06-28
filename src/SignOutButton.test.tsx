@@ -23,11 +23,10 @@ describe("SignOutButton", () => {
             defaultNotAuthorizedRouteRedirect: "/",
             service,
         }));
-        const tree = (
+
+        render(
             <SignOutButton data-testid="assert">Hello</SignOutButton>
         );
-
-        render(tree);
 
         // Act
         fireEvent.click(await screen.findByTestId("assert"));
@@ -40,7 +39,7 @@ describe("SignOutButton", () => {
         // Arrange
         const user = {
             id: "id",
-            token: "some token",
+            accessToken: "some token",
             name: "some name",
             email: "some@email.com",
             role: "some role",
@@ -55,12 +54,11 @@ describe("SignOutButton", () => {
             service,
             user,
         }));
-        const tree = (
-            <SignOutButton id={id} className={className}>{content}</SignOutButton>
-        );
 
         // Act
-        render(tree);
+        render(
+            <SignOutButton id={id} className={className}>{content}</SignOutButton>
+        );
 
         // Assert
         const element = await screen.findByRole("button");

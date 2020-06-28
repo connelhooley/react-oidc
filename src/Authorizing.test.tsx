@@ -16,7 +16,7 @@ describe("Authorizing", () => {
         // Arrange
         useUserMock.mockImplementation(() => ({
             id: "id",
-            token: "some token",
+            accessToken: "some token",
             name: "some name",
             email: "some@email.com",
             role: "some role",

@@ -87,6 +87,15 @@ export function useUser(): User|false|undefined {
     }
 }
 
+export function useAccessToken(): string|undefined {
+    const auth = useContext(AuthContext);
+    if (auth === undefined) {
+        throw new Error("useAccessToken called outside of AuthProvider");
+    } else {
+        return auth.user && auth.user.accessToken || undefined;
+    }
+}
+
 interface CompleteSignInProps {
     service: AuthService;
     loading?: () => JSX.Element;

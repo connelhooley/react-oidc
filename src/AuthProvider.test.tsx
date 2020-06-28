@@ -5,7 +5,7 @@ import { createMemoryHistory } from "history";
 import React from "react";
 import { Router, Route } from "react-router-dom";
 
-import { AuthProvider, useUser, useAuth } from "./AuthProvider";
+import { AuthProvider, useUser, useAuth, useAccessToken } from "./AuthProvider";
 import { AuthService } from "./AuthService";
 
 jest.mock("./AuthService");
@@ -445,115 +445,6 @@ describe("AuthProvider", () => {
     });
 });
 
-describe("useUser", () => {
-    test("should provide user context containing a user who is signed in to children in all non-sign-in routes", () => {
-        // Arrange
-        const oidcSettings: any = {
-            hello: "world",
-        };
-        const expectedUser = {
-            id: "id",
-            token: "some token",
-            name: "some name",
-            email: "some@email.com",
-            role: "some role",
-        };
-        const history = createMemoryHistory();
-        let user: any;
-        const AssertComponent = () => {
-            user = useUser();
-            return <></>;
-        };
-        history.push("/non-sign-in-route");
-
-        render(
-            <Router history={history}>
-                <AuthProvider oidcSettings={oidcSettings}>
-                    <AssertComponent />
-                </AuthProvider>
-            </Router>
-        );
-
-        // Act
-        act(() => AuthServiceMock.mock.instances[0].onUserUpdated?.call(undefined, expectedUser));
-
-        // Assert
-        expect(user).toEqual(expectedUser);
-    });
-
-    test("should provide user context containing a user who is signed out to children in all non-sign-in routes", () => {
-        // Arrange
-        const oidcSettings: any = {
-            hello: "world",
-        };
-        const expectedUser = false;
-        const history = createMemoryHistory();
-        let user: any;
-        const AssertComponent = () => {
-            user = useUser();
-            return <></>;
-        };
-        history.push("/non-sign-in-route");
-
-        render(
-            <Router history={history}>
-                <AuthProvider oidcSettings={oidcSettings}>
-                    <AssertComponent />
-                </AuthProvider>
-            </Router>
-        );
-
-        // Act
-        act(() => AuthServiceMock.mock.instances[0].onUserUpdated?.call(undefined, expectedUser));
-
-        // Assert
-        expect(user).toEqual(expectedUser);
-    });
-
-    test("should provide user context containing a user who is signing in our out to children in all non-sign-in routes", () => {
-        // Arrange
-        const oidcSettings: any = {
-            hello: "world",
-        };
-        const expectedUser = undefined;
-        const history = createMemoryHistory();
-        let user: any;
-        const AssertComponent = () => {
-            user = useUser();
-            return <></>;
-        };
-        history.push("/non-sign-in-route");
-
-        render(
-            <Router history={history}>
-                <AuthProvider oidcSettings={oidcSettings}>
-                    <AssertComponent />
-                </AuthProvider>
-            </Router>
-        );
-
-        // Act
-        act(() => AuthServiceMock.mock.instances[0].onUserUpdated?.call(undefined, expectedUser));
-
-        // Assert
-        expect(user).toEqual(expectedUser);
-    });
-
-    test("should throw when called outside of an AuthProvider", async () => {
-        // Arrange
-        const AssertComponent = () => {
-            useUser();
-            return <></>;
-        };
-
-        // Act
-        const act = () => render(<AssertComponent />);
-
-        // Assert
-        expect(act).toThrowError("useUser called outside of AuthProvider");
-    });
-});
-
 describe("useAuth", () => {
     test("should provide auth context containing a user who is signed in to children in all non-sign-in routes", () => {
         // Arrange
@@ -562,7 +453,7 @@ describe("useAuth", () => {
         };
         const expectedUser = {
             id: "id",
-            token: "some token",
+            accessToken: "some token",
             name: "some name",
             email: "some@email.com",
             role: "some role",
@@ -797,5 +688,224 @@ describe("useAuth", () => {
 
         // Assert
         expect(act).toThrowError("useAuth called outside of AuthProvider");
+    });
+});
+
+describe("useUser", () => {
+    test("should provide user context containing a user who is signed in to children in all non-sign-in routes", () => {
+        // Arrange
+        const oidcSettings: any = {
+            hello: "world",
+        };
+        const expectedUser = {
+            id: "id",
+            accessToken: "some token",
+            name: "some name",
+            email: "some@email.com",
+            role: "some role",
+        };
+        const history = createMemoryHistory();
+        let user: any;
+        const AssertComponent = () => {
+            user = useUser();
+            return <></>;
+        };
+        history.push("/non-sign-in-route");
+
+        render(
+            <Router history={history}>
+                <AuthProvider oidcSettings={oidcSettings}>
+                    <AssertComponent />
+                </AuthProvider>
+            </Router>
+        );
+
+        // Act
+        act(() => AuthServiceMock.mock.instances[0].onUserUpdated?.call(undefined, expectedUser));
+
+        // Assert
+        expect(user).toEqual(expectedUser);
+    });
+
+    test("should provide user context containing a user who is signed out to children in all non-sign-in routes", () => {
+        // Arrange
+        const oidcSettings: any = {
+            hello: "world",
+        };
+        const expectedUser = false;
+        const history = createMemoryHistory();
+        let user: any;
+        const AssertComponent = () => {
+            user = useUser();
+            return <></>;
+        };
+        history.push("/non-sign-in-route");
+
+        render(
+            <Router history={history}>
+                <AuthProvider oidcSettings={oidcSettings}>
+                    <AssertComponent />
+                </AuthProvider>
+            </Router>
+        );
+
+        // Act
+        act(() => AuthServiceMock.mock.instances[0].onUserUpdated?.call(undefined, expectedUser));
+
+        // Assert
+        expect(user).toEqual(expectedUser);
+    });
+
+    test("should provide user context containing a user who is signing in our out to children in all non-sign-in routes", () => {
+        // Arrange
+        const oidcSettings: any = {
+            hello: "world",
+        };
+        const expectedUser = undefined;
+        const history = createMemoryHistory();
+        let user: any;
+        const AssertComponent = () => {
+            user = useUser();
+            return <></>;
+        };
+        history.push("/non-sign-in-route");
+
+        render(
+            <Router history={history}>
+                <AuthProvider oidcSettings={oidcSettings}>
+                    <AssertComponent />
+                </AuthProvider>
+            </Router>
+        );
+
+        // Act
+        act(() => AuthServiceMock.mock.instances[0].onUserUpdated?.call(undefined, expectedUser));
+
+        // Assert
+        expect(user).toEqual(expectedUser);
+    });
+
+    test("should throw when called outside of an AuthProvider", async () => {
+        // Arrange
+        const AssertComponent = () => {
+            useUser();
+            return <></>;
+        };
+
+        // Act
+        const act = () => render(<AssertComponent />);
+
+        // Assert
+        expect(act).toThrowError("useUser called outside of AuthProvider");
+    });
+});
+
+describe("useAccessToken", () => {
+    test("should provide access token for a user who is signed in to children in all non-sign-in routes", () => {
+        // Arrange
+        const oidcSettings: any = {
+            hello: "world",
+        };
+        const expectedAccessToken = "some token";
+        const user = {
+            id: "id",
+            accessToken: expectedAccessToken,
+            name: "some name",
+            email: "some@email.com",
+            role: "some role",
+        };
+        const history = createMemoryHistory();
+        let accessToken: string;
+        const AssertComponent = () => {
+            accessToken = useAccessToken();
+            return <></>;
+        };
+        history.push("/non-sign-in-route");
+
+        render(
+            <Router history={history}>
+                <AuthProvider oidcSettings={oidcSettings}>
+                    <AssertComponent />
+                </AuthProvider>
+            </Router>
+        );
+
+        // Act
+        act(() => AuthServiceMock.mock.instances[0].onUserUpdated?.call(undefined, user));
+
+        // Assert
+        expect(accessToken).toEqual(expectedAccessToken);
+    });
+
+    test("should provide undefined access token for a user who is signed out to children in all non-sign-in routes", () => {
+        // Arrange
+        const oidcSettings: any = {
+            hello: "world",
+        };
+        const user = false;
+        const history = createMemoryHistory();
+        let accessToken: string;
+        const AssertComponent = () => {
+            accessToken = useAccessToken();
+            return <></>;
+        };
+        history.push("/non-sign-in-route");
+
+        render(
+            <Router history={history}>
+                <AuthProvider oidcSettings={oidcSettings}>
+                    <AssertComponent />
+                </AuthProvider>
+            </Router>
+        );
+
+        // Act
+        act(() => AuthServiceMock.mock.instances[0].onUserUpdated?.call(undefined, user));
+
+        // Assert
+        expect(accessToken).toBeUndefined();
+    });
+
+    test("should provide undefined access token containing for a user who is signing in our out to children in all non-sign-in routes", () => {
+        // Arrange
+        const oidcSettings: any = {
+            hello: "world",
+        };
+        const user = undefined;
+        const history = createMemoryHistory();
+        let accessToken: string;
+        const AssertComponent = () => {
+            accessToken = useAccessToken();
+            return <></>;
+        };
+        history.push("/non-sign-in-route");
+
+        render(
+            <Router history={history}>
+                <AuthProvider oidcSettings={oidcSettings}>
+                    <AssertComponent />
+                </AuthProvider>
+            </Router>
+        );
+
+        // Act
+        act(() => AuthServiceMock.mock.instances[0].onUserUpdated?.call(undefined, user));
+
+        // Assert
+        expect(accessToken).toBeUndefined();
+    });
+
+    test("should throw when called outside of an AuthProvider", async () => {
+        // Arrange
+        const AssertComponent = () => {
+            useAccessToken();
+            return <></>;
+        };
+
+        // Act
+        const act = () => render(<AssertComponent />);
+
+        // Assert
+        expect(act).toThrowError("useAccessToken called outside of AuthProvider");
     });
 });

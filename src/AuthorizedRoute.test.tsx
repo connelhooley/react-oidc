@@ -22,7 +22,7 @@ describe("AuthorizedRoute", () => {
         // Arrange
         const user = {
             id: "id",
-            token: "some token",
+            accessToken: "some token",
             name: "some name",
             email: "some@email.com",
             role: "some role",
@@ -37,7 +37,8 @@ describe("AuthorizedRoute", () => {
         const history = createMemoryHistory();
         const content = "hello, world";
         const route = "/hello-world";
-        const tree = (
+
+        render(
             <Router history={history}>
                 <Switch>
                     <AuthorizedRoute path={route}>
@@ -46,8 +47,6 @@ describe("AuthorizedRoute", () => {
                 </Switch>
             </Router>
         );
-
-        render(tree);
 
         // Act
         history.push(route);
@@ -61,7 +60,7 @@ describe("AuthorizedRoute", () => {
         const role = "some role";
         const user = {
             id: "id",
-            token: "some token",
+            accessToken: "some token",
             name: "some name",
             email: "some@email.com",
             role,
@@ -76,7 +75,8 @@ describe("AuthorizedRoute", () => {
         const history = createMemoryHistory();
         const content = "hello, world";
         const route = "/hello-world";
-        const tree = (
+
+        render(
             <Router history={history}>
                 <Switch>
                     <AuthorizedRoute path={route} role={role}>
@@ -85,8 +85,6 @@ describe("AuthorizedRoute", () => {
                 </Switch>
             </Router>
         );
-
-        render(tree);
 
         // Act
         history.push(route);
@@ -99,7 +97,7 @@ describe("AuthorizedRoute", () => {
         // Arrange
         const user = {
             id: "id",
-            token: "some token",
+            accessToken: "some token",
             name: "some name",
             email: "some@email.com",
             role: "some role",
@@ -114,7 +112,8 @@ describe("AuthorizedRoute", () => {
         const history = createMemoryHistory();
         const content = "hello, world";
         const route = "/hello-world";
-        const tree = (
+
+        render(
             <Router history={history}>
                 <Switch>
                     <AuthorizedRoute path={route} role="some other role">
@@ -123,8 +122,6 @@ describe("AuthorizedRoute", () => {
                 </Switch>
             </Router>
         );
-
-        render(tree);
 
         // Act
         history.push(route);
@@ -137,7 +134,7 @@ describe("AuthorizedRoute", () => {
         // Arrange
         const user = {
             id: "id",
-            token: "some token",
+            accessToken: "some token",
             name: "some name",
             email: "some@email.com",
             role: "some role",
@@ -152,7 +149,8 @@ describe("AuthorizedRoute", () => {
         const history = createMemoryHistory();
         const content = "hello, world";
         const route = "/hello-world";
-        const tree = (
+
+        render(
             <Router history={history}>
                 <Switch>
                     <AuthorizedRoute path={route}>
@@ -161,8 +159,6 @@ describe("AuthorizedRoute", () => {
                 </Switch>
             </Router>
         );
-
-        render(tree);
 
         // Act
         history.push(route);
@@ -184,7 +180,8 @@ describe("AuthorizedRoute", () => {
         const history = createMemoryHistory();
         const content = "hello, world";
         const route = "/hello-world";
-        const tree = (
+
+        render(
             <Router history={history}>
                 <Switch>
                     <AuthorizedRoute path={route}>
@@ -193,8 +190,6 @@ describe("AuthorizedRoute", () => {
                 </Switch>
             </Router>
         );
-
-        render(tree);
 
         // Act
         history.push(route);
@@ -216,7 +211,8 @@ describe("AuthorizedRoute", () => {
         const history = createMemoryHistory();
         const content = "hello, world";
         const route = "/hello-world";
-        const tree = (
+
+        render(
             <Router history={history}>
                 <Switch>
                     <AuthorizedRoute path={route}>
@@ -225,8 +221,6 @@ describe("AuthorizedRoute", () => {
                 </Switch>
             </Router>
         );
-
-        render(tree);
 
         // Act
         history.push(route);
@@ -251,7 +245,8 @@ describe("AuthorizedRoute", () => {
         const route = "/hello-world";
         const fallbackContent = "goodbye, world";
         const fallbackRoute = "/fallback";
-        const tree = (
+
+        render(
             <Router history={history}>
                 <Switch>
                     <AuthorizedRoute path={route} redirect={fallbackRoute}>
@@ -263,8 +258,6 @@ describe("AuthorizedRoute", () => {
                 </Switch>
             </Router>
         );
-
-        render(tree);
 
         // Act
         history.push(route);
@@ -289,7 +282,8 @@ describe("AuthorizedRoute", () => {
         const route = "/hello-world";
         const fallbackContent = "goodbye, world";
         const fallbackRoute = "/fallback";
-        const tree = (
+
+        render(
             <Router history={history}>
                 <Switch>
                     <AuthorizedRoute path={route} redirect={fallbackRoute}>
@@ -301,8 +295,6 @@ describe("AuthorizedRoute", () => {
                 </Switch>
             </Router>
         );
-
-        render(tree);
 
         // Act
         history.push(route);
@@ -316,7 +308,7 @@ describe("AuthorizedRoute", () => {
         const role = "some role";
         const user = {
             id: "id",
-            token: "some token",
+            accessToken: "some token",
             name: "some name",
             email: "some@email.com",
             role,
@@ -334,7 +326,8 @@ describe("AuthorizedRoute", () => {
         const route = "/hello-world";
         const fallbackContent = "goodbye, world";
         const fallbackRoute = "/fallback";
-        const tree = (
+
+        render(
             <Router history={history}>
                 <Switch>
                     <AuthorizedRoute path={route} redirect={route} role={role}>
@@ -347,8 +340,6 @@ describe("AuthorizedRoute", () => {
             </Router>
         );
 
-        render(tree);
-
         // Act
         history.push(route);
 
@@ -360,7 +351,7 @@ describe("AuthorizedRoute", () => {
         // Arrange
         const user = {
             id: "id",
-            token: "some token",
+            accessToken: "some token",
             name: "some name",
             email: "some@email.com",
             role: "some role",
@@ -378,7 +369,8 @@ describe("AuthorizedRoute", () => {
         const route = "/hello-world";
         const fallbackContent = "goodbye, world";
         const fallbackRoute = "/fallback";
-        const tree = (
+
+        render(
             <Router history={history}>
                 <Switch>
                     <AuthorizedRoute path={route} redirect={route} role="some other role">
@@ -391,8 +383,6 @@ describe("AuthorizedRoute", () => {
             </Router>
         );
 
-        render(tree);
-
         // Act
         history.push(route);
 
@@ -404,7 +394,7 @@ describe("AuthorizedRoute", () => {
         // Arrange
         const user = {
             id: "id",
-            token: "some token",
+            accessToken: "some token",
             name: "some name",
             email: "some@email.com",
             role: "some role",
@@ -422,7 +412,8 @@ describe("AuthorizedRoute", () => {
         const route = "/hello-world";
         const fallbackContent = "goodbye, world";
         const fallbackRoute = "/fallback";
-        const tree = (
+
+        render(
             <Router history={history}>
                 <Switch>
                     <AuthorizedRoute path={route} redirect={route}>
@@ -434,8 +425,6 @@ describe("AuthorizedRoute", () => {
                 </Switch>
             </Router>
         );
-
-        render(tree);
 
         // Act
         history.push(route);
@@ -460,7 +449,8 @@ describe("AuthorizedRoute", () => {
         const content = "hello, world";
         const route = "/hello-world";
         const fallbackContent = "goodbye, world";
-        const tree = (
+
+        render(
             <Router history={history}>
                 <Switch>
                     <AuthorizedRoute path={route}>
@@ -472,8 +462,6 @@ describe("AuthorizedRoute", () => {
                 </Switch>
             </Router>
         );
-
-        render(tree);
 
         // Act
         history.push(route);
@@ -498,7 +486,8 @@ describe("AuthorizedRoute", () => {
         const content = "hello, world";
         const route = "/hello-world";
         const fallbackContent = "goodbye, world";
-        const tree = (
+
+        render(
             <Router history={history}>
                 <Switch>
                     <AuthorizedRoute path={route}>
@@ -510,8 +499,6 @@ describe("AuthorizedRoute", () => {
                 </Switch>
             </Router>
         );
-
-        render(tree);
 
         // Act
         history.push(route);
@@ -525,7 +512,7 @@ describe("AuthorizedRoute", () => {
         const role = "some role";
         const user = {
             id: "id",
-            token: "some token",
+            accessToken: "some token",
             name: "some name",
             email: "some@email.com",
             role,
@@ -543,7 +530,8 @@ describe("AuthorizedRoute", () => {
         const content = "hello, world";
         const route = "/hello-world";
         const fallbackContent = "goodbye, world";
-        const tree = (
+
+        render(
             <Router history={history}>
                 <Switch>
                     <AuthorizedRoute path={route} role={role}>
@@ -556,8 +544,6 @@ describe("AuthorizedRoute", () => {
             </Router>
         );
 
-        render(tree);
-
         // Act
         history.push(route);
 
@@ -569,7 +555,7 @@ describe("AuthorizedRoute", () => {
         // Arrange
         const user = {
             id: "id",
-            token: "some token",
+            accessToken: "some token",
             name: "some name",
             email: "some@email.com",
             role: "some role",
@@ -587,7 +573,8 @@ describe("AuthorizedRoute", () => {
         const content = "hello, world";
         const route = "/hello-world";
         const fallbackContent = "goodbye, world";
-        const tree = (
+
+        render(
             <Router history={history}>
                 <Switch>
                     <AuthorizedRoute path={route} role="some other role">
@@ -600,8 +587,6 @@ describe("AuthorizedRoute", () => {
             </Router>
         );
 
-        render(tree);
-
         // Act
         history.push(route);
 
@@ -613,7 +598,7 @@ describe("AuthorizedRoute", () => {
         // Arrange
         const user = {
             id: "id",
-            token: "some token",
+            accessToken: "some token",
             name: "some name",
             email: "some@email.com",
             role: "some role",
@@ -631,7 +616,8 @@ describe("AuthorizedRoute", () => {
         const content = "hello, world";
         const route = "/hello-world";
         const fallbackContent = "goodbye, world";
-        const tree = (
+
+        render(
             <Router history={history}>
                 <Switch>
                     <AuthorizedRoute path={route}>
@@ -643,8 +629,6 @@ describe("AuthorizedRoute", () => {
                 </Switch>
             </Router>
         );
-
-        render(tree);
 
         // Act
         history.push(route);

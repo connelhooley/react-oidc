@@ -10,8 +10,8 @@ type SignInButtonProps =
 export const SignInButton = withRouter((props: SignInButtonProps) =>
 {
     const { service } = useAuth();
-    const startSignIn = async () => {
-        await service.startSignIn(props.location.pathname + props.location.search + props.location.hash);
+    const startSignIn = () => {
+        service.startSignIn(props.location.pathname + props.location.search + props.location.hash);
     }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { staticContext, history, location, match, ...childProps } = props;

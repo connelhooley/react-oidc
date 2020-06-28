@@ -1,18 +1,25 @@
-import React, { PropsWithChildren, useEffect } from "react";
-import { RouteComponentProps, withRouter } from "react-router-dom";
+import React, { PropsWithChildren, useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 import { useAuth } from "./AuthProvider";
 
-export const SignIn = withRouter((props: PropsWithChildren<RouteComponentProps>) =>
-{
+interface SignInProps {
+    delay?: number;
+}
+
+export function SignIn({delay = 1000, children}: PropsWithChildren<SignInProps>): JSX.Element {
+    const location = useLocation();
     const { service } = useAuth();
+    const [startSignIn, setStartSignIn] = useState(false);
     useEffect(() => {
-        const startSignIn = async () => {
-            await service.startSignIn(props.location.pathname + props.location.search + props.location.hash);
-        };
-        startSignIn();
-    }, [])
+        setTimeout(() => setStartSignIn(true), delay)
+    }, []);
+
+    if (startSignIn) {
+        service.startSignIn(location.pathname + location.search + location.hash);
+    }
+
     return (
-        <>{props.children}</>
+        <>{children}</>
     );
-});
+}

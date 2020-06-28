@@ -26,12 +26,11 @@ describe("SignInButton", () => {
             defaultNotAuthorizedRouteRedirect: "/",
             service,
         }));
-        const tree = (
+        render(
             <Router history={history}>
                 <SignInButton data-testid="assert">Hello</SignInButton>
             </Router>
         );
-        render(tree);
 
         // Act
         fireEvent.click(await screen.findByTestId("assert"));
@@ -52,14 +51,13 @@ describe("SignInButton", () => {
             defaultNotAuthorizedRouteRedirect: "/",
             service,
         }));
-        const tree = (
+
+        // Act
+        render(
             <Router history={history}>
                 <SignInButton id={id} className={className}>{content}</SignInButton>
             </Router>
         );
-
-        // Act
-        render(tree);
 
         // Assert
         const element = await screen.findByRole("button");

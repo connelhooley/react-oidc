@@ -71,12 +71,12 @@ describe("AuthService()", () => {
             hello: "world",
         };
         const id = "some id";
-        const token = "some token";
+        const accessToken = "some token";
         const name = "some name";
         const email = "some email";
         const role = "some role";
         const oidcUser: any = {
-            access_token: token,
+            access_token: accessToken,
             profile: {
                 sub: id,
                 name,
@@ -94,7 +94,7 @@ describe("AuthService()", () => {
         expect(service.onUserUpdated).toBeCalledTimes(1);
         expect(service.onUserUpdated).toBeCalledWith({
             id,
-            token,
+            accessToken,
             name,
             email,
             role,
@@ -317,12 +317,12 @@ describe("AuthService.initiate", () => {
             expired: true,
         };
         const id = "some id";
-        const token = "some token";
+        const accessToken = "some token";
         const name = "some name";
         const email = "some email";
         const role = "some role";
         const refreshedOidcUser: any = {
-            access_token: token,
+            access_token: accessToken,
             profile: {
                 sub: id,
                 name,
@@ -346,7 +346,7 @@ describe("AuthService.initiate", () => {
         expect(service.onUserUpdated).toBeCalledTimes(1);
         expect(service.onUserUpdated).toBeCalledWith({
             id,
-            token,
+            accessToken,
             name,
             email,
             role,
@@ -471,12 +471,12 @@ describe("AuthService.initiate", () => {
     test("should call onUserUpdated when user manager contains a valid user", async () => {
         // Arrange
         const id = "some id";
-        const token = "some token";
+        const accessToken = "some token";
         const name = "some name";
         const email = "some email";
         const role = "some role";
         const oidcUser: any = {
-            access_token: token,
+            access_token: accessToken,
             profile: {
                 sub: id,
                 name,
@@ -499,7 +499,7 @@ describe("AuthService.initiate", () => {
         expect(service.onUserUpdated).toBeCalledTimes(1);
         expect(service.onUserUpdated).toBeCalledWith({
             id,
-            token,
+            accessToken,
             name,
             email,
             role,

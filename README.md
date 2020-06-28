@@ -78,7 +78,7 @@ export function HomePage() {
             <p>{user.name}</p>
             <p>{user.email}</p>
             <p>{user.role}</p>
-            <p>{user.token}</p>
+            <p>{user.accessToken}</p>
         );
     } else if (user == false) {
         return (
@@ -92,12 +92,35 @@ export function HomePage() {
 }
 ```
 
-The user object contains the user's token and this can be used to create `Authorization` bearer headers in HTTP clients, below is a quick example using fetch:
+# useAccessToken
+
+Returns the access token for the signed in user if available. The returned object can be either:
+
+- A `string` containing the access token when the user is signed in.
+- `undefined` when the user is signing in or is not signed in.
 
 ``` js
-const user = useUser();
+export function HomePage() {
+    const accessToken = useAccessToken();
+    if (accessToken) {
+        return (
+            <h1>Signed in</h1>
+            <p>{user.accessToken}</p>
+        );
+    } else {
+        return (
+            <h1>Signing in or not signed in</h1>
+        );
+    }
+}
+```
+
+The access token can be used to create `Authorization` bearer headers in HTTP clients, below is a quick example using fetch:
+
+``` js
+const accessToken = useAccessToken();
 const authHeader = user
-    ? { "Authorization": `Bearer ${user.token}` }
+    ? { "Authorization": `Bearer ${accessToken}` }
     : undefined;
 const res = await fetch("https://example.com", {
     method: "GET",
@@ -288,12 +311,22 @@ All props are passed down to the underlying button meaning the component can be 
 
 # SignIn
 
-Starts the sign in process by redirecting as soon as it is rendered.
+Starts the sign in process by redirecting one second after it is rendered.
 
 ``` js
 export function SignInRoute() {
     return (
         <SignIn>Loading...</SignIn>
+    );
+}
+```
+
+You can also provide a delay value in the `SignIn`s props to configure the duration to delay before starting the signing process:
+
+``` js
+export function SignInRoute() {
+    return (
+        <SignIn delay={3000}>Loading for 3 seconds...</SignIn>
     );
 }
 ```

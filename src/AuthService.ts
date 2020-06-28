@@ -2,7 +2,7 @@ import { UserManager, User as OidcUser, UserManagerSettings } from "oidc-client"
 
 export interface User {
     id: string;
-    token: string;
+    accessToken: string;
     name: string;
     email: string;
     role: string;
@@ -73,7 +73,7 @@ export class AuthService {
         } else if (user?.profile?.name && user?.profile?.email && user?.profile?.role) {
             const mappedUser = {
                 id: user.profile.sub,
-                token: user.access_token,
+                accessToken: user.access_token,
                 name: user.profile.name,
                 email: user.profile.email,
                 role: user.profile.role,

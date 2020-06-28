@@ -16,7 +16,7 @@ describe("Authorized", () => {
         // Arrange
         useUserMock.mockImplementation(() => ({
             id: "id",
-            token: "some token",
+            accessToken: "some token",
             name: "some name",
             email: "some@email.com",
             role: "some role",
@@ -37,7 +37,7 @@ describe("Authorized", () => {
         const role = "some role";
         useUserMock.mockImplementation(() => ({
             id: "id",
-            token: "some token",
+            accessToken: "some token",
             name: "some name",
             email: "some@email.com",
             role,
@@ -57,7 +57,7 @@ describe("Authorized", () => {
         // Arrange
         useUserMock.mockImplementation(() => ({
             id: "id",
-            token: "some token",
+            accessToken: "some token",
             name: "some name",
             email: "some@email.com",
             role: "some role",
