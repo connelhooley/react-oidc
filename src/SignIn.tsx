@@ -12,7 +12,8 @@ export function SignIn({delay = 1000, children}: PropsWithChildren<SignInProps>)
     const { service } = useAuth();
     const [startSignIn, setStartSignIn] = useState(false);
     useEffect(() => {
-        setTimeout(() => setStartSignIn(true), delay)
+        const timeoutId = setTimeout(() => setStartSignIn(true), delay);
+        return () => clearTimeout(timeoutId);
     }, []);
 
     if (startSignIn) {
