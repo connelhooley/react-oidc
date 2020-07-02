@@ -678,6 +678,7 @@ describe("useAuth", () => {
 
     test("should throw when called outside of an AuthProvider", async () => {
         // Arrange
+        jest.spyOn(console, "error").mockImplementation(noop) // Hides message: Consider adding an error boundary to your tree to customize error handling behavior
         const AssertComponent = () => {
             useAuth();
             return <></>;
@@ -787,6 +788,7 @@ describe("useUser", () => {
 
     test("should throw when called outside of an AuthProvider", async () => {
         // Arrange
+        jest.spyOn(console, "error").mockImplementation(noop) // Hides message: Consider adding an error boundary to your tree to customize error handling behavior
         const AssertComponent = () => {
             useUser();
             return <></>;
@@ -897,6 +899,7 @@ describe("useAccessToken", () => {
 
     test("should throw when called outside of an AuthProvider", async () => {
         // Arrange
+        jest.spyOn(console, "error").mockImplementation(noop) // Hides message: Consider adding an error boundary to your tree to customize error handling behavior
         const AssertComponent = () => {
             useAccessToken();
             return <></>;
