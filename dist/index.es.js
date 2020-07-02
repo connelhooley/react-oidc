@@ -507,7 +507,8 @@ function SignIn(_a) {
     var service = useAuth().service;
     var _c = useState(false), startSignIn = _c[0], setStartSignIn = _c[1];
     useEffect(function () {
-        setTimeout(function () { return setStartSignIn(true); }, delay);
+        var timeoutId = setTimeout(function () { return setStartSignIn(true); }, delay);
+        return function () { return clearTimeout(timeoutId); };
     }, []);
     if (startSignIn) {
         service.startSignIn(location.pathname + location.search + location.hash);
