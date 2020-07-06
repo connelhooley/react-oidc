@@ -1,6 +1,6 @@
 {
   "name": "@connelhooley/react-oidc",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "A few opinionated React components wrapping oidc-client",
   "repository": "github:connelhooley/react-oidc",
   "homepage": "https://github.com/connelhooley/react-oidc",
@@ -9,7 +9,7 @@
     "prepublishOnly": "tsc && rollup --config",
     "test": "jest"
   },
-  "main": "lib/index.js",
+  "main": "dist/index.js",
   "module": "dist/index.es.js",
   "types": "lib/index.d.ts",
   "files": [
