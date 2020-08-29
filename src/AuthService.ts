@@ -1,4 +1,4 @@
-import { UserManager, User as OidcUser, UserManagerSettings } from "oidc-client";
+import { UserManager, User as OidcUser, UserManagerSettings, Log } from "oidc-client";
 
 export interface User {
     id: string;
@@ -80,6 +80,7 @@ export class AuthService {
             };
             return mappedUser;
         } else {
+            Log.logger.warn("One or more of the name, email and role claims is null/undefined");
             return false;
         }
     }

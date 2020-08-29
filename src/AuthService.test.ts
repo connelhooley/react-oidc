@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { cleanup } from "@testing-library/react";
-import { UserManager } from "oidc-client";
+import { UserManager, Log } from "oidc-client";
 
 import { AuthService } from "./AuthService";
 
@@ -13,6 +13,7 @@ beforeEach(() => {
         addUserLoaded: jest.fn(),
         addUserUnloaded: jest.fn(),
     };
+    Log.logger = console;
 });
 
 afterEach(cleanup);
